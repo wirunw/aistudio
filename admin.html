@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel - Pharm Connection AI Studio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/yY1rPJ07/wirun_facbook.png">
+    
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0, transparent 30%),
+                radial-gradient(circle at 90% 10%, rgba(236, 72, 153, 0.08) 0, transparent 32%),
+                linear-gradient(135deg, #f8fafc 0%, #eef2ff 48%, #f8fafc 100%);
+            min-height: 100vh;
+        }
+        h1, h2, h3, h4, button, .font-heading {
+            font-family: 'Prompt', sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    
+    <!-- Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-20 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float"></div>
+        <div class="absolute top-40 right-20 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-20 left-1/2 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Admin Container -->
+    <div class="relative z-10 w-full max-w-6xl">
+        
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl shadow-lg mb-4 animate-pulse-slow">
+                <i data-lucide="shield-check" class="w-10 h-10 text-white"></i>
+            </div>
+            <h1 class="text-4xl font-bold text-gray-800 mb-2 font-heading">Admin Panel</h1>
+            <p class="text-lg text-purple-600 font-semibold font-heading">Pharm Connection AI Studio</p>
+            <p class="text-sm text-gray-500">จัดการผู้ใช้งานและตั้งค่าระบบ</p>
+        </div>
+
+        <!-- Admin Functions -->
+        <div class="glass-effect rounded-2xl shadow-2xl p-8">
+            
+            <!-- User Management -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <i data-lucide="users" class="w-6 h-6 text-purple-600"></i>
+                    จัดการผู้ใช้งาน
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Add User -->
+                    <div class="bg-white rounded-xl p-6 border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">เพิ่มผู้ใช้ใหม่</h3>
+                        <form id="addUserForm" class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อผู้ใช้</label>
+                                <input type="text" id="newUsername" required
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">รหัสผ่าน</label>
+                                <input type="password" id="newPassword" required
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ชื่อจริง</label>
+                                <input type="text" id="newName" required
+                                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">สิทธิ</label>
+                                <select id="newRole" required
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="user">ผู้ใช้ทั่วไป</option>
+                                    <option value="admin">ผู้ดูแล</option>
+                                </select>
+                            </div>
+                            <button type="submit" 
+                                    class="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-semibold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                                <i data-lucide="user-plus" class="w-5 h-5 inline mr-2"></i>
+                                เพิ่มผู้ใช้
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- User List -->
+                    <div class="bg-white rounded-xl p-6 border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">รายชื่อผู้ใช้</h3>
+                        <div id="userList" class="space-y-2 max-h-64 overflow-y-auto">
+                            <!-- Users will be listed here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Settings -->
+            <div class="mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+                    <i data-lucide="settings" class="w-6 h-6 text-purple-600"></i>
+                    ตั้งค่าระบบ
+                </h2>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white rounded-xl p-6 border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">การตั้งค่า</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-gray-700 mb-1">ระยะเวลาเซสชัน (ชั่วโมง)</label>
+                                <select id="sessionTimeout" 
+                                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                                    <option value="1">1 ชั่วโมง</option>
+                                    <option value="24">24 ชั่วโมง</option>
+                                    <option value="168">7 วัน</option>
+                                    <option value="720">30 วัน</option>
+                                </select>
+                            </div>
+                            <button onclick="saveSettings()" 
+                                    class="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                                <i data-lucide="save" class="w-5 h-5 inline mr-2"></i>
+                                บันทึกการตั้งค่า
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-6 border border-gray-200">
+                        <h3 class="text-lg font-semibold text-gray-700 mb-4">สถิติผู้ใช้</h3>
+                        <div class="space-y-4">
+                            <button onclick="showUserStats()" 
+                                    class="w-full bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                                <i data-lucide="bar-chart-3" class="w-5 h-5 inline mr-2"></i>
+                                ดูสถิติการใช้งาน
+                            </button>
+                            <button onclick="exportUsers()" 
+                                    class="w-full bg-gradient-to-r from-orange-500 to-red-600 hover:from-orange-600 hover:to-red-700 text-white font-semibold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                                <i data-lucide="download" class="w-5 h-5 inline mr-2"></i>
+                                ส่งออกข้อมูลผู้ใช้
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Back Button -->
+            <div class="text-center">
+                <button onclick="window.location.href='index.html'" 
+                        class="bg-gray-600 hover:bg-gray-700 text-white font-semibold py-3 px-6 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg">
+                    <i data-lucide="arrow-left" class="w-5 h-5 inline mr-2"></i>
+                    กลับไปหน้าหลัก
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-4 right-4 bg-green-500 text-white px-6 py-3 rounded-lg shadow-lg transform translate-x-full transition-all duration-300 z-50">
+        <div class="flex items-center gap-2">
+            <i data-lucide="check-circle" class="w-5 h-5"></i>
+            <span id="toastMessage">ดำเนินการสำเร็จ</span>
+        </div>
+    </div>
+
+    <script>
+        // Simple encryption for passwords (basic obfuscation)
+        const simpleEncrypt = (text) => btoa(text);
+        const simpleDecrypt = (text) => atob(text);
+
+        // User database (in production, this should be server-side)
+        let users = [
+            { 
+                username: 'admin', 
+                password: simpleEncrypt('admin123'), 
+                role: 'admin',
+                name: 'Administrator'
+            },
+            { 
+                username: 'wirun', 
+                password: simpleEncrypt('bear123'), 
+                role: 'admin',
+                name: 'ภก.วิรุณ เวชศิริ'
+            },
+            { 
+                username: 'user1', 
+                password: simpleEncrypt('user123'), 
+                role: 'user',
+                name: 'User 1'
+            }
+        ];
+
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Check authentication
+            checkAdminAuth();
+            
+            // Load users
+            renderUserList();
+            
+            // Load settings
+            loadSettings();
+        });
+
+        // --- AUTHENTICATION CHECK ---
+        function checkAdminAuth() {
+            const loginData = localStorage.getItem('aiStudioLogin');
+            if (!loginData) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            try {
+                const data = JSON.parse(loginData);
+                const now = new Date();
+                const expiresAt = new Date(data.expiresAt);
+                
+                if (now >= expiresAt) {
+                    localStorage.removeItem('aiStudioLogin');
+                    window.location.href = 'login.html';
+                    return false;
+                }
+                
+                // Check if admin
+                if (data.role !== 'admin') {
+                    window.location.href = 'index.html';
+                    return false;
+                }
+                
+                return data;
+            } catch (e) {
+                localStorage.removeItem('aiStudioLogin');
+                window.location.href = 'login.html';
+                return false;
+            }
+        }
+
+        // --- USER MANAGEMENT ---
+        function renderUserList() {
+            const userList = document.getElementById('userList');
+            userList.innerHTML = users.map((user, index) => `
+                <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <div class="flex items-center gap-3">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                            <i data-lucide="user" class="w-4 h-4 text-purple-600"></i>
+                        </div>
+                        <div>
+                            <div class="font-semibold text-gray-800">${user.name}</div>
+                            <div class="text-sm text-gray-500">${user.username} (${user.role === 'admin' ? 'ผู้ดูแล' : 'ผู้ใช้ทั่วไป'})</div>
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <button onclick="editUser(${index})" class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                            <i data-lucide="edit" class="w-4 h-4"></i>
+                        </button>
+                        <button onclick="deleteUser(${index})" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+            
+            // Re-initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        document.getElementById('addUserForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const username = document.getElementById('newUsername').value.trim();
+            const password = document.getElementById('newPassword').value;
+            const name = document.getElementById('newName').value.trim();
+            const role = document.getElementById('newRole').value;
+            
+            // Check if username already exists
+            if (users.find(u => u.username === username)) {
+                showToast('ชื่อผู้ใช้นี้มีอยู่แล้ว', 'error');
+                return;
+            }
+            
+            // Add new user
+            users.push({
+                username: username,
+                password: simpleEncrypt(password),
+                role: role,
+                name: name
+            });
+            
+            // Clear form
+            document.getElementById('addUserForm').reset();
+            
+            // Update list
+            renderUserList();
+            
+            showToast('เพิ่มผู้ใช้สำเร็จแล้ว', 'success');
+        });
+
+        function editUser(index) {
+            const user = users[index];
+            const newName = prompt('แก้ไขชื่อ:', user.name);
+            if (newName && newName.trim()) {
+                users[index].name = newName.trim();
+                renderUserList();
+                showToast('แก้ไขชื่อผู้ใช้สำเร็จ', 'success');
+            }
+        }
+
+        function deleteUser(index) {
+            const user = users[index];
+            if (confirm(`คุณต้องการลบผู้ใช้ "${user.name}" ใช่หรือไม่?`)) {
+                users.splice(index, 1);
+                renderUserList();
+                showToast('ลบผู้ใช้สำเร็จ', 'success');
+            }
+        }
+
+        // --- SETTINGS MANAGEMENT ---
+        function loadSettings() {
+            const settings = JSON.parse(localStorage.getItem('adminSettings') || '{}');
+            document.getElementById('sessionTimeout').value = settings.sessionTimeout || '24';
+        }
+
+        function saveSettings() {
+            const settings = {
+                sessionTimeout: document.getElementById('sessionTimeout').value
+            };
+            localStorage.setItem('adminSettings', JSON.stringify(settings));
+            showToast('บันทึกการตั้งค่าสำเร็จ', 'success');
+        }
+
+        function showUserStats() {
+            const totalUsers = users.length;
+            const adminUsers = users.filter(u => u.role === 'admin').length;
+            const regularUsers = users.filter(u => u.role === 'user').length;
+            
+            alert(`สถิติผู้ใช้:\n\nผู้ใช้ทั้งหมด: ${totalUsers} คน\nผู้ดูแล: ${adminUsers} คน\nผู้ใช้ทั่วไป: ${regularUsers} คน`);
+        }
+
+        function exportUsers() {
+            const dataStr = JSON.stringify(users, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'users_backup.json';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+            
+            showToast('ส่งออกข้อมูลผู้ใช้สำเร็จ', 'success');
+        }
+
+        // --- TOAST NOTIFICATION ---
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMessage = document.getElementById('toastMessage');
+            
+            toastMessage.textContent = message;
+            
+            // Update toast styling based on type
+            toast.className = `fixed bottom-4 right-4 px-6 py-3 rounded-lg shadow-lg transform transition-all duration-300 z-50 ${
+                type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }`;
+            
+            // Show toast
+            setTimeout(() => {
+                toast.classList.remove('translate-x-full');
+                toast.classList.add('translate-x-0');
+            }, 100);
+            
+            // Hide toast after 3 seconds
+            setTimeout(() => {
+                toast.classList.add('translate-x-full');
+                toast.classList.remove('translate-x-0');
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

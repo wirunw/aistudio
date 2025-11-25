@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Pharm Connection AI Studio</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/yY1rPJ07/wirun_facbook.png">
+    
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0, transparent 30%),
+                radial-gradient(circle at 90% 10%, rgba(236, 72, 153, 0.08) 0, transparent 32%),
+                linear-gradient(135deg, #f8fafc 0%, #eef2ff 48%, #f8fafc 100%);
+            min-height: 100vh;
+        }
+        h1, h2, h3, h4, button, .font-heading {
+            font-family: 'Prompt', sans-serif;
+        }
+        
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .animate-pulse-slow {
+            animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.8; }
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    
+    <!-- Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute top-20 left-20 w-64 h-64 bg-purple-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float"></div>
+        <div class="absolute top-40 right-20 w-72 h-72 bg-pink-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style="animation-delay: 2s;"></div>
+        <div class="absolute bottom-20 left-1/2 w-80 h-80 bg-blue-200 rounded-full mix-blend-multiply filter blur-xl opacity-30 animate-float" style="animation-delay: 4s;"></div>
+    </div>
+
+    <!-- Login Container -->
+    <div class="relative z-10 w-full max-w-md">
+        
+        <!-- Logo & Title -->
+        <div class="text-center mb-8">
+            <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-600 rounded-2xl shadow-lg mb-4 animate-pulse-slow">
+                <i data-lucide="sparkles" class="w-10 h-10 text-white"></i>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-800 mb-2 font-heading">Pharm Connection</h1>
+            <p class="text-lg text-purple-600 font-semibold font-heading">AI Studio</p>
+            <p class="text-sm text-gray-500 mt-2">Unified Prompt Generator v5.0</p>
+        </div>
+
+        <!-- Login Form -->
+        <div class="glass-effect rounded-2xl shadow-2xl p-8">
+            <div class="text-center mb-6">
+                <h2 class="text-xl font-bold text-gray-800 mb-2 font-heading">เข้าสู่ระบบ</h2>
+                <p class="text-sm text-gray-600">กรุณากรอกข้อมูลเพื่อเข้าใช้งาน</p>
+            </div>
+
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-6">
+                <!-- Username -->
+                <div>
+                    <label for="username" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i data-lucide="user" class="w-4 h-4 inline mr-1"></i>
+                        ชื่อผู้ใช้
+                    </label>
+                    <input 
+                        type="text" 
+                        id="username" 
+                        name="username"
+                        required
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-gray-700 placeholder-gray-400"
+                        placeholder="กรอกชื่อผู้ใช้"
+                        autocomplete="username"
+                    >
+                </div>
+
+                <!-- Password -->
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-2">
+                        <i data-lucide="lock" class="w-4 h-4 inline mr-1"></i>
+                        รหัสผ่าน
+                    </label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="password" 
+                            name="password"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all text-gray-700 placeholder-gray-400 pr-12"
+                            placeholder="กรอกรหัสผ่าน"
+                            autocomplete="current-password"
+                        >
+                        <button 
+                            type="button" 
+                            onclick="togglePassword()"
+                            class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+                        >
+                            <i data-lucide="eye" id="toggleIcon" class="w-5 h-5"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Error Message -->
+                <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+                    <i data-lucide="alert-circle" class="w-4 h-4 inline mr-1"></i>
+                    <span id="errorText"></span>
+                </div>
+
+                <!-- Login Button -->
+                <button 
+                    type="submit"
+                    class="w-full bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white font-semibold py-3 px-4 rounded-lg transition-all transform hover:scale-[1.02] active:scale-[0.98] shadow-lg flex items-center justify-center gap-2"
+                >
+                    <i data-lucide="log-in" class="w-5 h-5"></i>
+                    เข้าสู่ระบบ
+                </button>
+            </form>
+
+            <!-- Footer -->
+            <div class="mt-6 pt-6 border-t border-gray-200">
+                <div class="flex items-center justify-center gap-2 text-xs text-gray-500">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span>ระบบป้องกันด้วยการยืนยันตัวตน</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Creator Credit -->
+        <div class="text-center mt-6 text-xs text-gray-500">
+            <p>Developed by ภก.วิรุณ เวชศิริ (พี่หมี)</p>
+            <p>Pharm Connection Co., Ltd.</p>
+        </div>
+    </div>
+
+    <script>
+        // Simple encryption for passwords (basic obfuscation)
+        const simpleEncrypt = (text) => btoa(text);
+        const simpleDecrypt = (text) => atob(text);
+
+        // User database (in production, this should be server-side)
+        const users = [
+            { 
+                username: 'admin', 
+                password: simpleEncrypt('admin123'), 
+                role: 'admin',
+                name: 'Administrator'
+            },
+            { 
+                username: 'wirun', 
+                password: simpleEncrypt('bear123'), 
+                role: 'admin',
+                name: 'ภก.วิรุณ เวชศิริ'
+            },
+            { 
+                username: 'user1', 
+                password: simpleEncrypt('user123'), 
+                role: 'user',
+                name: 'User 1'
+            }
+        ];
+
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+
+        // Toggle password visibility
+        function togglePassword() {
+            const passwordInput = document.getElementById('password');
+            const toggleIcon = document.getElementById('toggleIcon');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleIcon.setAttribute('data-lucide', 'eye-off');
+            } else {
+                passwordInput.type = 'password';
+                toggleIcon.setAttribute('data-lucide', 'eye');
+            }
+            
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        // Handle login
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value;
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            // Hide error message
+            errorMessage.classList.add('hidden');
+            
+            // Find user
+            const user = users.find(u => u.username === username);
+            
+            if (!user) {
+                showError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+                return;
+            }
+            
+            // Verify password
+            if (simpleDecrypt(user.password) !== password) {
+                showError('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง');
+                return;
+            }
+            
+            // Successful login
+            const loginData = {
+                username: user.username,
+                name: user.name,
+                role: user.role,
+                loginTime: new Date().toISOString(),
+                expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString() // 24 hours
+            };
+            
+            // Store in localStorage
+            localStorage.setItem('aiStudioLogin', JSON.stringify(loginData));
+            
+            // Redirect to main app
+            window.location.href = 'index.html';
+        }
+
+        // Show error message
+        function showError(message) {
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            
+            errorText.textContent = message;
+            errorMessage.classList.remove('hidden');
+            
+            // Shake animation
+            errorMessage.style.animation = 'shake 0.5s';
+            setTimeout(() => {
+                errorMessage.style.animation = '';
+            }, 500);
+        }
+
+        // Add shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+                20%, 40%, 60%, 80% { transform: translateX(5px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Check if already logged in
+        window.addEventListener('load', () => {
+            const loginData = localStorage.getItem('aiStudioLogin');
+            if (loginData) {
+                try {
+                    const data = JSON.parse(loginData);
+                    const now = new Date();
+                    const expiresAt = new Date(data.expiresAt);
+                    
+                    if (now < expiresAt) {
+                        // Still logged in, redirect
+                        window.location.href = 'index.html';
+                    } else {
+                        // Session expired
+                        localStorage.removeItem('aiStudioLogin');
+                    }
+                } catch (e) {
+                    // Invalid data, remove
+                    localStorage.removeItem('aiStudioLogin');
+                }
+            }
+        });
+    </script>
+</body>
+</html>

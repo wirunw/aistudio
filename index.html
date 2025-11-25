@@ -581,11 +581,39 @@
     <div id="toast"><i data-lucide="check-circle" class="w-5 h-5 inline mr-1"></i> สร้างเนื้อเรื่องเรียบร้อย!</div>
 
     <script>
+        // --- AUTHENTICATION CHECK ---
+        function checkAuthentication() {
+            const loginData = localStorage.getItem('aiStudioLogin');
+            if (!loginData) {
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            try {
+                const data = JSON.parse(loginData);
+                const now = new Date();
+                const expiresAt = new Date(data.expiresAt);
+                
+                if (now >= expiresAt) {
+                    localStorage.removeItem('aiStudioLogin');
+                    window.location.href = 'login.html';
+                    return false;
+                }
+                
+                return data;
+            } catch (e) {
+                localStorage.removeItem('aiStudioLogin');
+                window.location.href = 'login.html';
+                return false;
+            }
+        }
+
         // --- GLOBAL STATE ---
         let currentMode = 'universal';
         let currentTemplateId = null;
         let formValues = {};
         let panels = [];
+        let currentUser = null;
         const moduleUrls = {
             hcp: 'hcpCharacter.html',
             infographic: 'infographic.html',
@@ -814,6 +842,12 @@
 
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
+            // Check authentication first
+            currentUser = checkAuthentication();
+            if (!currentUser) {
+                return; // Will redirect to login
+            }
+            
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
@@ -831,6 +865,9 @@
 
             // Set initial mode
             switchMode('universal');
+            
+            // Add user info to header
+            updateUserInfo();
         });
 
         // --- MODE SWITCHING ---
@@ -1352,6 +1389,53 @@
                 lucide.createIcons();
             }
             setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+
+        // --- USER INFO & LOGOUT ---
+        function updateUserInfo() {
+            if (!currentUser) return;
+            
+            // Add user info to header
+            const headerDiv = document.querySelector('.pro-glass .flex-col.md\\:flex-row.md\\:items-center.md\\:justify-between.gap-4 .flex.items-center.gap-3');
+            if (headerDiv) {
+                const userInfoHtml = `
+                    <div class="flex items-center gap-2">
+                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                            <i data-lucide="user-check" class="w-4 h-4 text-purple-600"></i>
+                        </div>
+                        <div>
+                            <p class="text-xs text-indigo-200 font-semibold">ผู้ใช้งาน</p>
+                            <p class="text-sm font-bold text-white">${currentUser.name}</p>
+                            <p class="text-xs text-indigo-100">${currentUser.role === 'admin' ? 'ผู้ดูแล' : 'ผู้ใช้ทั่วไป'}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <button onclick="logout()" class="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 border border-white/20 hover:border-white/40">
+                            <i data-lucide="log-out" class="w-4 h-4"></i>
+                            ออกจากระบบ
+                        </button>
+                        ${currentUser.role === 'admin' ? `
+                        <button onclick="window.location.href='admin.html'" class="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 border border-white/20 hover:border-white/40">
+                            <i data-lucide="settings" class="w-4 h-4"></i>
+                            จัดการผู้ใช้
+                        </button>` : ''}
+                    </div>
+                `;
+                
+                headerDiv.innerHTML = userInfoHtml;
+                
+                // Re-initialize icons
+                if (typeof lucide !== 'undefined') {
+                    lucide.createIcons();
+                }
+            }
+        }
+
+        function logout() {
+            if (confirm('คุณต้องการออกจากระบบใช่หรือไม่?')) {
+                localStorage.removeItem('aiStudioLogin');
+                window.location.href = 'login.html';
+            }
         }
 
         // Search functionality
