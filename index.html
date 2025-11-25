@@ -1396,20 +1396,38 @@
             if (!currentUser) return;
             
             // Add user info to header
-            const headerDiv = document.querySelector('.pro-glass .flex-col.md\\:flex-row.md\\:items-center.md\\:justify-between.gap-4 .flex.items-center.gap-3');
+            const headerDiv = document.querySelector('.pro-glass .flex-col.md\\:flex-row.md\\:items-center.md\\:justify-between.gap-4');
             if (headerDiv) {
                 const userInfoHtml = `
-                    <div class="flex items-center gap-2">
-                        <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
-                            <i data-lucide="user-check" class="w-4 h-4 text-purple-600"></i>
+                    <div class="flex items-center gap-3">
+                        <div class="flex items-center gap-3">
+                            <div class="w-14 h-14 rounded-xl overflow-hidden avatar-frame bg-white/10">
+                                <img src="https://i.postimg.cc/yY1rPJ07/wirun_facbook.png" alt="ภก.วิรุณ เวชศิริ (พี่หมี)" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <div>
+                                <p class="text-[11px] uppercase tracking-[0.2em] text-indigo-200 font-semibold">Product Owner / Creator</p>
+                                <p class="text-lg font-bold leading-tight">ภก.วิรุณ เวชศิริ (พี่หมี)</p>
+                                <p class="text-xs text-indigo-100">Pharm Connection Co., Ltd.</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-xs text-indigo-200 font-semibold">ผู้ใช้งาน</p>
-                            <p class="text-sm font-bold text-white">${currentUser.name}</p>
-                            <p class="text-xs text-indigo-100">${currentUser.role === 'admin' ? 'ผู้ดูแล' : 'ผู้ใช้ทั่วไป'}</p>
+                        <div class="flex items-center gap-2">
+                            <span class="pro-chip">Professional UI Refresh</span>
+                            <span class="pro-chip light flex items-center gap-1">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i> Unified v5.0
+                            </span>
                         </div>
                     </div>
                     <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-2">
+                            <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
+                                <i data-lucide="user-check" class="w-4 h-4 text-purple-600"></i>
+                            </div>
+                            <div>
+                                <p class="text-xs text-indigo-200 font-semibold">ผู้ใช้งาน</p>
+                                <p class="text-sm font-bold text-white">${currentUser.name}</p>
+                                <p class="text-xs text-indigo-100">${currentUser.role === 'admin' ? 'ผู้ดูแล' : 'ผู้ใช้ทั่วไป'}</p>
+                            </div>
+                        </div>
                         <button onclick="logout()" class="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 border border-white/20 hover:border-white/40">
                             <i data-lucide="log-out" class="w-4 h-4"></i>
                             ออกจากระบบ
