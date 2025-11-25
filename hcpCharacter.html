@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลัง Prompt สำหรับ Gen ภาพเภสัชกร</title>
+    <!-- โหลด Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลด Google Fonts (Noto Sans Thai) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ตั้งค่าฟอนต์ Noto Sans Thai เป็นฟอนต์หลัก */
+        body {
+            font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Container หลัก -->
+    <div class="container mx-auto max-w-7xl p-4 sm:p-10 my-10">
+
+        <!-- ส่วนหัว (Header) -->
+        <header class="text-center mb-10">
+            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-700">Gen ภาพให้ "เป๊ะ" ด้วย Prompt Engineering</h1>
+            <p class="text-xl text-gray-600 mt-2">Case Studies สำหรับเภสัชกรรูปแบบต่างๆ</p>
+        </header>
+
+        <!-- Grid สำหรับ Case Studies -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+
+            <!-- Case Study 1: เภสัชกรชุมชน -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                <div class="p-6 sm:p-8">
+                    <div class="flex justify-between items-start mb-5 gap-4">
+                        <h2 class="text-2xl font-bold text-indigo-600">Case Study 1: เภสัชกรชุมชน (Community Pharmacist)</h2>
+                        <button onclick="copyPrompt(this, 'prompt-case1')" class="flex-shrink-0 bg-indigo-100 text-indigo-700 font-semibold px-4 py-2 rounded-lg text-sm hover:bg-indigo-200 transition duration-150 disabled:opacity-50">
+                            คัดลอก Prompt
+                        </button>
+                    </div>
+                    <ul class="space-y-3 text-gray-700" id="prompt-case1">
+                        <li><strong>Role:</strong> เภสัชกรชุมชน</li>
+                        <li><strong>Gender/Age/Ethnicity:</strong> หญิง, 40 ปี, คนไทย (ผิวสีน้ำผึ้ง)</li>
+                        <li><strong>Body/Skin:</strong> รูปร่างสมส่วน, ผิวสีน้ำผึ้งสุขภาพดี</li>
+                        <li><strong>Face:</strong> หน้ารูปไข่, มีรอยยิ้มเล็กน้อยที่มุมปาก, ดูใจดี</li>
+                        <li><strong>Eyes:</strong> ตาสีน้ำตาลเข้ม, แววตาอบอุ่นและฉลาด</li>
+                        <li><strong>Hair:</strong> ผมสีดำ เกล้ามวยเรียบร้อย ดูเป็นมืออาชีพ</li>
+                        <li><strong>Outfit:</strong> เสื้อกาวน์สีขาวสะอาดทับเสื้อเชิ้ตสีฟ้าอ่อน, ที่กระเป๋าเสื้อมีคำว่า "Rx"</li>
+                        <li><strong>Accessories:</strong> นาฬิกาข้อมือสายหนังสีน้ำตาล</li>
+                        <li><strong>Personality:</strong> น่าเชื่อถือ, ใจดี, พร้อมให้คำปรึกษา, เข้าถึงง่าย</li>
+                        <li><strong>Pose:</strong> ยืนครึ่งตัว, มือข้างหนึ่งถือกล่องยา, อีกข้างทำท่าทางอธิบายยา</li>
+                        <li><strong>Features:</strong> พื้นหลังเป็นชั้นวางยาในร้าน, แสงไฟในร้านดูสว่างและอบอุ่น, พื้นหลังเบลอเล็กน้อย (Bokeh)</li>
+                        <li><strong>Visual style:</strong> สไตล์ภาพการ์ตูน, แสงนุ่มนวล</li>
+                    </ul>
+                </div>
+                <div class="bg-red-50 text-red-700 p-4 mt-auto text-sm font-medium border-t border-red-100">
+                    (ห้ามแสดงตัวอักษรใดๆ นอกจาก Rx ในรูป)
+                </div>
+            </div>
+
+            <!-- Case Study 2: เภสัชกรโรงพยาบาล -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                <div class="p-6 sm:p-8">
+                    <div class="flex justify-between items-start mb-5 gap-4">
+                        <h2 class="text-2xl font-bold text-indigo-600">Case Study 2: เภสัชกรโรงพยาบาล (Chemo Prep)</h2>
+                        <button onclick="copyPrompt(this, 'prompt-case2')" class="flex-shrink-0 bg-indigo-100 text-indigo-700 font-semibold px-4 py-2 rounded-lg text-sm hover:bg-indigo-200 transition duration-150 disabled:opacity-50">
+                            คัดลอก Prompt
+                        </button>
+                    </div>
+                    <ul class="space-y-3 text-gray-700" id="prompt-case2">
+                        <li><strong>Role:</strong> เภสัชกรเตรียมยาเคมีบำบัด</li>
+                        <li><strong>Gender/Age/Ethnicity:</strong> ชาย, 30 ปี, เอเชียตะวันออก (ผิวขาวเหลือง)</li>
+                        <li><strong>Body/Skin:</strong> รูปร่างผอมสูง, ผิวขาว</li>
+                        <li><strong>Eyes:</strong> ตาชั้นเดียว, คิ้วเข้ม, แววตามุ่งมั่น, สวมแว่นตานิรภัย (Safety Goggles)</li>
+                        <li><strong>Hair:</strong> (มองไม่เห็น - สวมหมวกคลุมผมสีฟ้า)</li>
+                        <li><strong>Outfit:</strong> ชุดปลอดเชื้อ (Sterile Gown) สีฟ้าอ่อน, สวมถุงมือยางสีม่วง, สวมหน้ากากอนามัย, สวมหมวกคลุมผม</li>
+                        <li><strong>Accessories:</strong> แว่นตานิรภัย</li>
+                        <li><strong>Personality:</strong> มีสมาธิสูง, ละเอียดรอบคอบ, มืออาชีพ</li>
+                        <li><strong>Pose:</strong> กำลังทำงานอยู่หน้าตู้ปลอดเชื้อ (Laminar Flow Hood), มือทั้งสองข้างกำลังผสมยาในขวด (Vial)</li>
+                        <li><strong>Features:</strong> พื้นหลังเป็นห้อง Cleanroom, แสงไฟในห้องเป็นสีขาวสว่างจ้า, บรรยากาศดูไฮเทคและปลอดเชื้อ</li>
+                        <li><strong>Visual style:</strong> สไตล์รูปการ์ตูน, เน้นความสะอาด (Clean), แสงสะท้อนบนอุปกรณ์แก้ว</li>
+                    </ul>
+                </div>
+                <div class="bg-red-50 text-red-700 p-4 mt-auto text-sm font-medium border-t border-red-100">
+                    (ห้ามแสดงตัวอักษรใดๆ ในรูป)
+                </div>
+            </div>
+
+            <!-- Case Study 3: เภสัชกรวิจัยเครื่องสำอาง -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                <div class="p-6 sm:p-8">
+                    <div class="flex justify-between items-start mb-5 gap-4">
+                        <h2 class="text-2xl font-bold text-indigo-600">Case Study 3: เภสัชกรวิจัยเครื่องสำอาง (Cosmetic R&D)</h2>
+                        <button onclick="copyPrompt(this, 'prompt-case3')" class="flex-shrink-0 bg-indigo-100 text-indigo-700 font-semibold px-4 py-2 rounded-lg text-sm hover:bg-indigo-200 transition duration-150 disabled:opacity-50">
+                            คัดลอก Prompt
+                        </button>
+                    </div>
+                    <ul class="space-y-3 text-gray-700" id="prompt-case3">
+                        <li><strong>Role:</strong> เภสัชกรฝ่ายวิจัยและพัฒนา (R&D) เครื่องสำอาง</li>
+                        <li><strong>Gender/Age/Ethnicity:</strong> หญิง, 28 ปี, ลูกครึ่งไทย-ยุโรป</li>
+                        <li><strong>Body/Skin:</strong> หุ่นดี, ผิวขาวอมชมพู, ดูสุขภาพดี</li>
+                        <li><strong>Face:</strong> หน้ารูปหัวใจ, จมูกโด่ง, แต่งหน้าโทนธรรมชาติ</li>
+                        <li><strong>Eyes:</strong> ตาสีน้ำตาลอ่อน, คิ้วทรงตรงแบบเกาหลี</li>
+                        <li><strong>Hair:</strong> ผมสีน้ำตาลช็อกโกลแลต, ดัดลอนคลายๆ ปล่อยยาวถึงกลางหลัง</li>
+                        <li><strong>Outfit:</strong> เสื้อกาวน์แล็บสีขาว (ไม่ติดกระดุม) ทับเสื้อเบลเซอร์สีเบจและกางเกงสแลค</li>
+                        <li><strong>Accessories:</strong> ต่างหูมุกขนาดเล็ก, แว่นตานิรภัยพาดอยู่บนหัว</li>
+                        <li><strong>Personality:</strong> สร้างสรรค์, ฉลาด, มั่นใจ, ทันสมัย</li>
+                        <li><strong>Pose:</strong> ยืนถือบีกเกอร์ (Beaker) ที่มีของเหลวสีชมพูใส, กำลังจดบันทึกลงในแท็บเล็ต</li>
+                        <li><strong>Features:</strong> พื้นหลังเป็นแล็บที่ดูโมเดิร์น, มีขวดผลิตภัณฑ์เครื่องสำอางดีไซน์สวย, มีใบไม้ประดับ</li>
+                        <li><strong>Visual style:</strong> สไตล์ภาพการ์ตูน, สีสันสดใสโทนพาสเทล, ดูสะอาดตา (Minimal)</li>
+                    </ul>
+                </div>
+                <div class="bg-red-50 text-red-700 p-4 mt-auto text-sm font-medium border-t border-red-100">
+                    (ห้ามแสดงตัวอักษรใดๆ ในรูป)
+                </div>
+            </div>
+
+            <!-- Case Study 4: อาจารย์เภสัช -->
+            <div class="bg-white rounded-2xl shadow-xl overflow-hidden flex flex-col">
+                <div class="p-6 sm:p-8">
+                    <div class="flex justify-between items-start mb-5 gap-4">
+                        <h2 class="text-2xl font-bold text-indigo-600">Case Study 4: อาจารย์เภสัช (Professor of Pharmacy)</h2>
+                        <button onclick="copyPrompt(this, 'prompt-case4')" class="flex-shrink-0 bg-indigo-100 text-indigo-700 font-semibold px-4 py-2 rounded-lg text-sm hover:bg-indigo-200 transition duration-150 disabled:opacity-50">
+                            คัดลอก Prompt
+                        </button>
+                    </div>
+                    <ul class="space-y-3 text-gray-700" id="prompt-case4">
+                        <li><strong>Role:</strong> อาจารย์เกียรติคุณ คณะเภสัชศาสตร์</li>
+                        <li><strong>Gender/Age/Ethnicity:</strong> ชาย, 30 ปี, คนไทยเชื้อสายจีน</li>
+                        <li><strong>Body/Skin:</strong> รูปร่างสมส่วน, ภูมิฐาน, ผิวขาวเหลือง</li>
+                        <li><strong>Face:</strong> หน้ากลม, ดูสุขุมและใจดี</li>
+                        <li><strong>Eyes:</strong> คิ้วหนา, ใส่แว่นสายตาแบบครึ่งกรอบ (Half-frame)</li>
+                        <li><strong>Hair:</strong> ผมสีดำเทา, หวีเรียบไปด้านหลัง</li>
+                        <li><strong>Outfit:</strong> เสื้อเชิ้ตสีขาว ผูกเนคไทสีเข้ม, สวมเสื้อกาวน์ยาวทับ, ที่กระเป๋าเสื้อมีปากกาหลายด้าม</li>
+                        <li><strong>Accessories:</strong> ปากกา, แว่นสายตา, แหวนที่นิ้วนางข้างซ้าย</li>
+                        <li><strong>Personality:</strong> มีความรู้, น่าเคารพ, สุขุม, ใจดี</li>
+                        <li><strong>Pose:</strong> ยืนอยู่หน้ากระดานไวท์บอร์ดที่เต็มไปด้วยสูตรโครงสร้างเคมี, ถือหนังสือเรียนเล่มหนา</li>
+                        <li><strong>Features:</strong> พื้นหลังเป็นห้องทำงานที่เต็มไปด้วยตู้หนังสือ, มีโมเดลโมเลกุล (Molecular Model) วางอยู่บนโต๊ะ</li>
+                        <li><strong>Visual style:</strong> สไตล์ภาพการ์ตูน, เน้นแสงเงาที่นุ่มลึก, ให้ความรู้สึกคลาสสิกและน่าเชื่อถือ</li>
+                    </ul>
+                </div>
+                <div class="bg-red-50 text-red-700 p-4 mt-auto text-sm font-medium border-t border-red-100">
+                    (ห้ามแสดงตัวอักษรใดๆ ในรูป)
+                </div>
+            </div>
+
+        </div> <!-- ปิด Grid -->
+
+        <!-- Footer -->
+        <footer class="mt-12 text-center text-sm text-gray-500">
+            Credit : AI Club for Pharmacist
+        </footer>
+
+    </div> <!-- ปิด Container -->
+
+    <!-- ส่วนของ JavaScript -->
+    <script>
+        function copyPrompt(buttonElement, elementId) {
+            // 1. ดึงข้อความจาก <ul> ที่กำหนด
+            const listElement = document.getElementById(elementId);
+            const listItems = listElement.getElementsByTagName('li');
+            let textToCopy = '';
+
+            // 2. จัดรูปแบบข้อความให้เหมือนต้นฉบับ
+            for (let item of listItems) {
+                textToCopy += item.innerText + '\n';
+            }
+            
+            // 3. สร้าง Textarea ชั่วคราวเพื่อคัดลอก
+            const textArea = document.createElement("textarea");
+            textArea.value = textToCopy.trim(); // .trim() เพื่อลบ newline สุดท้าย
+            textArea.style.position = "fixed";  // ป้องกันการเลื่อนหน้าจอ
+            textArea.style.opacity = 0;
+            document.body.appendChild(textArea);
+            
+            textArea.select();
+            textArea.setSelectionRange(0, 99999); // สำหรับ Mobile
+
+            try {
+                // 4. ใช้ document.execCommand('copy') ตามข้อกำหนด
+                document.execCommand('copy');
+                
+                // 5. ให้ Feedback กับผู้ใช้
+                const originalText = buttonElement.innerText;
+                buttonElement.innerText = 'คัดลอกแล้ว!';
+                buttonElement.disabled = true;
+
+                // 6. คืนค่าปุ่มกลับเหมือนเดิม
+                setTimeout(() => {
+                    buttonElement.innerText = originalText;
+                    buttonElement.disabled = false;
+                }, 2000);
+
+            } catch (err) {
+                console.error('Failed to copy text: ', err);
+                buttonElement.innerText = 'ล้มเหลว!';
+                 setTimeout(() => {
+                    buttonElement.innerText = originalText;
+                    buttonElement.disabled = false;
+                }, 2000);
+            }
+
+            // 7. ลบ Textarea ชั่วคราว
+            document.body.removeChild(textArea);
+        }
+    </script>
+
+</body>
+</html>

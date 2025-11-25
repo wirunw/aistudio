@@ -1,0 +1,1376 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pharm Connection AI Studio - Unified Prompt Generator</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=Prompt:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://i.postimg.cc/yY1rPJ07/wirun_facbook.png">
+    
+    <style>
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background:
+                radial-gradient(circle at 10% 20%, rgba(99, 102, 241, 0.08) 0, transparent 30%),
+                radial-gradient(circle at 90% 10%, rgba(236, 72, 153, 0.08) 0, transparent 32%),
+                linear-gradient(135deg, #f8fafc 0%, #eef2ff 48%, #f8fafc 100%);
+        }
+        h1, h2, h3, h4, button, .font-heading {
+            font-family: 'Prompt', sans-serif;
+        }
+        /* Creator banner + chips */
+        .pro-glass {
+            background: linear-gradient(120deg, #0f172a 0%, #1f2937 45%, #312e81 100%);
+            color: #f8fafc;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 12px 40px rgba(15, 23, 42, 0.25);
+        }
+        .pro-chip {
+            background: rgba(255, 255, 255, 0.12);
+            color: #e0e7ff;
+            border: 1px solid rgba(255, 255, 255, 0.16);
+            padding: 6px 12px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .pro-chip.light {
+            background: #ffffff;
+            color: #111827;
+            border-color: rgba(255, 255, 255, 0.8);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.18);
+        }
+        .avatar-frame {
+            box-shadow: 0 10px 30px rgba(15, 23, 42, 0.35);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        /* Mode Switcher */
+        .mode-tab {
+            transition: all 0.3s ease;
+        }
+        .mode-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        /* SCQA Colors */
+        .scqa-s { background-color: #dbeafe; color: #1e40af; border-color: #93c5fd; }
+        .scqa-c { background-color: #fee2e2; color: #991b1b; border-color: #fca5a5; }
+        .scqa-q { background-color: #fef3c7; color: #92400e; border-color: #fcd34d; }
+        .scqa-a { background-color: #dcfce7; color: #166534; border-color: #86efac; }
+        
+        .panel-card {
+            transition: all 0.3s ease;
+        }
+        .panel-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Preview Grid */
+        .preview-grid-landscape { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; }
+        .preview-grid-portrait { display: grid; grid-template-columns: 1fr; gap: 0.5rem; max-width: 200px; margin: 0 auto; }
+        .preview-grid-square { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; aspect-ratio: 1/1; }
+        .preview-grid-2col { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0.5rem; max-width: 300px; margin: 0 auto; }
+        
+        @media (min-width: 768px) {
+            .preview-grid-landscape.many-items { grid-template-columns: repeat(3, 1fr); }
+        }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.3s ease-out forwards; }
+
+        /* Toast Notification */
+        #toast {
+            visibility: hidden;
+            min-width: 250px;
+            background-color: #10b981;
+            color: #fff;
+            text-align: center;
+            border-radius: 8px;
+            padding: 12px;
+            position: fixed;
+            z-index: 100;
+            left: 50%;
+            bottom: 30px;
+            transform: translateX(-50%);
+            font-family: 'Prompt', sans-serif;
+            font-weight: 600;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            opacity: 0;
+            transition: opacity 0.3s, bottom 0.3s;
+        }
+        #toast.show {
+            visibility: visible;
+            opacity: 1;
+            bottom: 50px;
+        }
+
+        /* Active Navigation */
+        .active-nav {
+            background-color: #FFF7ED;
+            border-left: 4px solid #E07A5F;
+        }
+        .active-nav .nav-title { color: #E07A5F; font-weight: 700; }
+        .active-nav .nav-desc { color: #E07A5F; opacity: 0.9; font-weight: 500; }
+    </style>
+</head>
+<body class="text-slate-800 flex flex-col min-h-screen">
+
+    <!-- Header -->
+    <header class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 py-3">
+            <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-2 rounded-lg shadow-md">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-xl font-bold text-slate-800 tracking-tight">Pharm Connection <span class="text-purple-600">AI Studio</span></h1>
+                        <p class="text-xs text-slate-500">Unified Prompt Generator v5.0</p>
+                    </div>
+                </div>
+                
+                <!-- Mode Switcher -->
+                <div class="flex bg-slate-100 rounded-lg p-1 overflow-x-auto w-full md:w-auto">
+                    <button onclick="switchMode('universal')" id="universalMode" class="mode-tab px-4 py-2 rounded-md text-sm font-semibold transition-all whitespace-nowrap">
+                        <i data-lucide="layers" class="w-4 h-4 inline mr-1"></i> Universal Mode
+                    </button>
+                    <button onclick="switchMode('comic')" id="comicMode" class="mode-tab px-4 py-2 rounded-md text-sm font-semibold transition-all whitespace-nowrap">
+                        <i data-lucide="book-open" class="w-4 h-4 inline mr-1"></i> Comic Studio
+                    </button>
+                    <button onclick="switchMode('hcp')" id="hcpMode" class="mode-tab px-4 py-2 rounded-md text-sm font-semibold transition-all whitespace-nowrap">
+                        <i data-lucide="stethoscope" class="w-4 h-4 inline mr-1"></i> HCP Characters
+                    </button>
+                    <button onclick="switchMode('infographic')" id="infographicMode" class="mode-tab px-4 py-2 rounded-md text-sm font-semibold transition-all whitespace-nowrap">
+                        <i data-lucide="bar-chart-3" class="w-4 h-4 inline mr-1"></i> Dashboard Guide
+                    </button>
+                    <button onclick="switchMode('task')" id="taskMode" class="mode-tab px-4 py-2 rounded-md text-sm font-semibold transition-all whitespace-nowrap">
+                        <i data-lucide="clipboard-list" class="w-4 h-4 inline mr-1"></i> Office Tasks
+                    </button>
+                    <button onclick="switchMode('myprompt')" id="mypromptMode" class="mode-tab px-4 py-2 rounded-md text-sm font-semibold transition-all whitespace-nowrap">
+                        <i data-lucide="bookmark-plus" class="w-4 h-4 inline mr-1"></i> My Prompts
+                    </button>
+                </div>
+            </div>
+
+            <!-- Creator Credit Banner -->
+            <div class="mt-3">
+                <div class="pro-glass rounded-xl px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div class="flex items-center gap-3">
+                        <div class="w-14 h-14 rounded-xl overflow-hidden avatar-frame bg-white/10">
+                            <img src="https://i.postimg.cc/yY1rPJ07/wirun_facbook.png" alt="ภก.วิรุณ เวชศิริ (พี่หมี)" class="w-full h-full object-cover" loading="lazy">
+                        </div>
+                        <div>
+                            <p class="text-[11px] uppercase tracking-[0.2em] text-indigo-200 font-semibold">Product Owner / Creator</p>
+                            <p class="text-lg font-bold leading-tight">ภก.วิรุณ เวชศิริ (พี่หมี)</p>
+                            <p class="text-xs text-indigo-100">Pharm Connection Co., Ltd.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="pro-chip">Professional UI Refresh</span>
+                        <span class="pro-chip light flex items-center gap-1">
+                            <i data-lucide="shield-check" class="w-4 h-4"></i> Unified v5.0
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <div id="primaryApp" class="flex-1 flex overflow-hidden max-w-7xl mx-auto w-full bg-white shadow-xl my-0 md:my-4 md:rounded-xl border border-gray-200">
+        
+        <!-- Sidebar (Categories) -->
+        <aside id="sidebar" class="w-80 bg-gray-50 border-r border-gray-200 flex flex-col hidden md:flex">
+            <!-- Search Bar -->
+            <div class="p-4 border-b border-gray-200">
+                <div class="relative">
+                    <input type="text" id="searchInput" placeholder="ค้นหา templates..." 
+                           class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-gray-400"></i>
+                </div>
+            </div>
+            
+            <!-- Menu List -->
+            <div class="flex-1 overflow-y-auto p-4">
+                <h2 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4 pl-2">Select Template</h2>
+                <nav id="categoryNav" class="space-y-6">
+                    <!-- Categories injected by JS -->
+                </nav>
+            </div>
+            
+            <!-- Credit Footer -->
+            <div class="p-4 border-t border-gray-200 bg-white">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                        <i data-lucide="user"></i>
+                    </div>
+                    <div>
+                        <p class="text-[10px] text-gray-400 uppercase font-bold">Developed by</p>
+                        <p class="text-xs font-bold text-[#3D405B]">ภก.วิรุณ เวชศิริ (พี่หมี)</p>
+                        <p class="text-[10px] text-gray-500">Pharm Connection Co., Ltd.</p>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Content Area -->
+        <div class="flex-1 flex flex-col overflow-hidden relative bg-white">
+            
+            <!-- Universal Mode Content -->
+            <div id="universalContent" class="flex-1 overflow-y-auto p-4 md:p-10">
+                
+                <!-- Welcome/Empty State -->
+                <div id="emptyState" class="flex flex-col items-center justify-center h-full text-center space-y-6 py-20">
+                    <div class="w-24 h-24 bg-purple-50 text-purple-600 rounded-full flex items-center justify-center text-4xl mb-2 animate-bounce shadow-inner">
+                        <i data-lucide="wand-2"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-3xl font-bold text-gray-700 mb-2">AI Prompt Studio</h2>
+                        <p class="text-gray-500 max-w-md mx-auto">เลือกรูปแบบ (Template) จากเมนูด้านซ้าย<br>เพื่อเริ่มเนรมิต Prompt ระดับมืออาชีพ</p>
+                    </div>
+                </div>
+
+                <!-- Builder Panel -->
+                <div id="builderPanel" class="max-w-3xl mx-auto hidden animate-fade-in pb-20">
+                    
+                    <!-- Title Header -->
+                    <div class="flex items-start gap-5 mb-8 border-b border-gray-100 pb-6">
+                        <div id="builderIcon" class="w-16 h-16 rounded-2xl bg-purple-50 border border-purple-100 text-purple-600 flex items-center justify-center text-3xl shadow-sm shrink-0"></div>
+                        <div>
+                            <h2 id="builderTitle" class="text-2xl font-bold text-[#3D405B] mb-1"></h2>
+                            <p id="builderDesc" class="text-sm text-gray-500 font-light leading-relaxed"></p>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Form -->
+                    <div class="bg-white rounded-2xl border border-gray-200 p-6 mb-6 shadow-sm hover:shadow-md transition-shadow">
+                        <h3 class="text-sm font-bold text-[#3D405B] mb-5 flex items-center gap-2">
+                            <div class="w-6 h-6 rounded bg-blue-100 text-blue-600 flex items-center justify-center text-xs"><i data-lucide="edit-3"></i></div>
+                            ข้อมูลหลัก (Key Inputs)
+                        </h3>
+                        <div id="dynamicInputs" class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <!-- Inputs injected here -->
+                        </div>
+                    </div>
+
+                    <!-- Advanced Options -->
+                    <div class="bg-gray-50 rounded-2xl border border-gray-200 p-6 mb-6">
+                        <h3 class="text-sm font-bold text-[#3D405B] mb-5 flex items-center gap-2">
+                            <div class="w-6 h-6 rounded bg-purple-100 text-purple-600 flex items-center justify-center text-xs"><i data-lucide="sliders"></i></div>
+                            ปรับแต่งเพิ่มเติม (Pro Settings)
+                        </h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <!-- Aspect Ratio -->
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">ขนาดภาพ (Size)</label>
+                                <div class="relative">
+                                    <select id="optAspect" onchange="updatePrompt()" class="w-full bg-white border-gray-200 text-gray-700 rounded-lg text-sm focus:ring-purple-500 focus:border-purple-500 shadow-sm appearance-none pl-3 pr-8 py-2.5 cursor-pointer hover:border-purple-300 transition-colors">
+                                        <option value="">Default</option>
+                                        <option value="Wide 16:9 aspect ratio">แนวนอน (16:9)</option>
+                                        <option value="Vertical 9:16 aspect ratio">แนวตั้ง (Story)</option>
+                                        <option value="Square 1:1 aspect ratio">จัตุรัส (1:1)</option>
+                                        <option value="Portrait 4:5 aspect ratio">โซเชียล (4:5)</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Lighting -->
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">แสง (Lighting)</label>
+                                <div class="relative">
+                                    <select id="optLighting" onchange="updatePrompt()" class="w-full bg-white border-gray-200 text-gray-700 rounded-lg text-sm focus:ring-purple-500 focus:border-purple-500 shadow-sm appearance-none pl-3 pr-8 py-2.5 cursor-pointer hover:border-purple-300 transition-colors">
+                                        <option value="">Default</option>
+                                        <option value="Natural daylight, bright and airy">ธรรมชาติ (Natural)</option>
+                                        <option value="Studio lighting, professional softbox">สตูดิโอ (Studio)</option>
+                                        <option value="Cinematic lighting, dramatic contrast">ดรามาติก (Cinematic)</option>
+                                        <option value="Warm golden hour sunlight">แสงอุ่น (Golden Hour)</option>
+                                        <option value="Neon cyberpunk lighting">นีออน (Neon)</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Style -->
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">สไตล์ภาพ (Style)</label>
+                                <div class="relative">
+                                    <select id="optStyle" onchange="updatePrompt()" class="w-full bg-white border-gray-200 text-gray-700 rounded-lg text-sm focus:ring-purple-500 focus:border-purple-500 shadow-sm appearance-none pl-3 pr-8 py-2.5 cursor-pointer hover:border-purple-300 transition-colors">
+                                        <option value="">Default</option>
+                                        <option value="Photorealistic, 8k, highly detailed">สมจริง (Realistic)</option>
+                                        <option value="Minimalist, clean lines, flat design">มินิมอล (Minimal)</option>
+                                        <option value="3D render, cute clay texture">3D น่ารัก (Clay)</option>
+                                        <option value="Corporate photography, trustworthy">ทางการ (Corporate)</option>
+                                        <option value="Japanese anime style">อนิเมะ (Anime)</option>
+                                        <option value="Oil painting, artistic texture">ภาพวาด (Painting)</option>
+                                        <option value="Comic book style, dynamic">คอมมิค (Comic)</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Mood -->
+                            <div>
+                                <label class="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">อารมณ์ (Mood)</label>
+                                <div class="relative">
+                                    <select id="optMood" onchange="updatePrompt()" class="w-full bg-white border-gray-200 text-gray-700 rounded-lg text-sm focus:ring-purple-500 focus:border-purple-500 shadow-sm appearance-none pl-3 pr-8 py-2.5 cursor-pointer hover:border-purple-300 transition-colors">
+                                        <option value="">Default</option>
+                                        <option value="Professional and Trustworthy">น่าเชื่อถือ (Trustworthy)</option>
+                                        <option value="Friendly and Approachable">เป็นกันเอง (Friendly)</option>
+                                        <option value="Innovative and Futuristic">ล้ำสมัย (Innovative)</option>
+                                        <option value="Warm and Caring">อบอุ่น/ใส่ใจ (Caring)</option>
+                                        <option value="Energetic and Dynamic">กระฉับกระเฉง (Active)</option>
+                                        <option value="Vintage and Nostalgic">ย้อนยุค (Vintage)</option>
+                                    </select>
+                                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500">
+                                        <i data-lucide="chevron-down" class="w-4 h-4"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Output Area -->
+                    <div class="bg-[#2D3748] rounded-2xl p-1 shadow-lg group relative">
+                        <div class="bg-[#1A202C] rounded-xl p-4">
+                            <div class="flex justify-between items-center mb-3">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></div>
+                                    <div class="w-2 h-2 rounded-full bg-yellow-500 animate-pulse delay-75"></div>
+                                    <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse delay-150"></div>
+                                    <span class="text-xs font-mono text-gray-400 ml-2">Generated Prompt</span>
+                                </div>
+                                <button onclick="copyPrompt()" id="copyBtn" class="bg-white/10 hover:bg-purple-600 text-white text-xs font-medium px-4 py-1.5 rounded-lg transition-all flex items-center gap-2 border border-transparent hover:shadow-lg active:scale-95">
+                                    <i data-lucide="copy" class="w-4 h-4"></i> คัดลอกโค้ด
+                                </button>
+                            </div>
+                            <textarea id="outputPrompt" class="w-full h-64 bg-transparent text-gray-300 font-mono text-sm resize-y focus:outline-none leading-relaxed border border-gray-700/50 rounded p-3" readonly></textarea>
+                        </div>
+                        <div class="px-4 py-2 text-[10px] text-gray-500 flex justify-between">
+                            <span>*Copy ไปวางใน Gemini (Nano Banana) ได้เลย</span>
+                            <span class="font-mono text-purple-400" id="charCount">0 chars</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Comic Mode Content -->
+            <div id="comicContent" class="hidden flex-1 overflow-y-auto p-4 md:p-10">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+                    
+                    <!-- Left Column: Settings & Panels (Input) -->
+                    <div class="lg:col-span-7 space-y-6">
+                        
+                        <!-- 1. Global Settings -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
+                            <div class="flex items-center gap-2 mb-4 border-b border-slate-100 pb-2">
+                                <div class="bg-blue-100 p-1.5 rounded-md text-blue-600">
+                                    <i data-lucide="settings-2" class="w-5 h-5"></i>
+                                </div>
+                                <h2 class="text-lg font-bold text-slate-800">1. ตั้งค่าพื้นฐาน (Global Settings)</h2>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                 <!-- Layout/Aspect Ratio -->
+                                 <div>
+                                    <label class="block text-sm font-semibold text-slate-700 mb-1">รูปแบบการจัดวาง (Layout)</label>
+                                    <select id="ratioSelect" onchange="updatePreviewLayout()" class="w-full p-2.5 bg-purple-50 border border-purple-200 text-purple-700 font-semibold rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-sm">
+                                        <option value="landscape">Landscape (แนวนอน 16:9)</option>
+                                        <option value="portrait">Webtoon (แนวตั้งยาว 1 แถว)</option>
+                                        <option value="grid_2col">Vertical Grid (2 คอลัมน์)</option>
+                                        <option value="square">Square Grid (จัตุรัส 1:1)</option>
+                                    </select>
+                                </div>
+
+                                <!-- Art Style -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 mb-1">สไตล์ภาพ (Art Style)</label>
+                                    <select id="styleSelect" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-sm">
+                                        <option value="clean digital illustration, flat color, thick lines, webtoon style">Digital Webtoon (Clean)</option>
+                                        <option value="Japanese manga style, detailed shading, screentones">Manga (Black & White)</option>
+                                        <option value="American comic book style, vibrant colors, halftone dots">American Comic</option>
+                                        <option value="watercolor painting style, soft edges, pastel palette">Watercolor (Soft)</option>
+                                        <option value="3D Pixar style character render, cute, bright lighting">3D Cute Render</option>
+                                    </select>
+                                </div>
+
+                                <!-- Language -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-slate-700 mb-1">ภาษาในภาพ (Language)</label>
+                                    <select id="langSelect" class="w-full p-2.5 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-sm">
+                                        <option value="Thai">Thai (ภาษาไทย)</option>
+                                        <option value="English">English (ภาษาอังกฤษ)</option>
+                                        <option value="Japanese">Japanese (ภาษาญี่ปุ่น)</option>
+                                        <option value="No Text">No Text (เว้นว่าง)</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Character Definition -->
+                            <div class="mt-4">
+                                <label class="block text-sm font-semibold text-slate-700 mb-1">
+                                    ตัวละครต้นแบบ (Main Character Prototype) 
+                                    <span class="text-xs font-normal text-slate-500 ml-1">*สำคัญมากเพื่อให้หน้าตาเหมือนเดิมทุกช่อง</span>
+                                </label>
+                                <textarea id="charDesc" rows="3" class="w-full p-3 bg-slate-50 border border-slate-300 rounded-lg focus:ring-2 focus:ring-purple-500 outline-none text-sm" placeholder="เช่น: A handsome male doctor, wearing glasses, short black hair, wearing a pink blazer over a white shirt, friendly face..."></textarea>
+                                <div class="flex gap-2 mt-2 overflow-x-auto pb-2">
+                                    <span class="text-xs font-bold text-slate-500 self-center">Presets:</span>
+                                    <button onclick="setChar('doctor_m')" class="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 whitespace-nowrap">หมอชาย (สูทชมพู)</button>
+                                    <button onclick="setChar('doc_f')" class="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 whitespace-nowrap">หมอหญิง (ผมยาว)</button>
+                                    <button onclick="setChar('pharma_m')" class="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 whitespace-nowrap">เภสัชชาย (เสื้อกาวน์)</button>
+                                    <button onclick="setChar('bear_no_glasses')" class="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 whitespace-nowrap">เภสัชหมี (ไม่แว่น)</button>
+                                    <button onclick="setChar('bear_glasses')" class="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 whitespace-nowrap">เภสัชหมี (ใส่แว่น)</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- 2. Storyboard Editor -->
+                        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 relative">
+                            <div class="flex flex-col gap-4 mb-4 border-b border-slate-100 pb-4">
+                                <div class="flex items-center justify-between">
+                                    <div class="flex items-center gap-2">
+                                        <div class="bg-purple-100 p-1.5 rounded-md text-purple-600">
+                                            <i data-lucide="layers" class="w-5 h-5"></i>
+                                        </div>
+                                        <h2 class="text-lg font-bold text-slate-800">2. เนื้อเรื่อง (Storyboard & SCQA)</h2>
+                                    </div>
+                                     <!-- Add Panel Button -->
+                                     <button onclick="addPanel()" class="bg-slate-800 hover:bg-slate-900 text-white text-sm px-3 py-1.5 rounded-lg flex items-center gap-1 transition shadow-sm">
+                                        <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มช่อง
+                                    </button>
+                                </div>
+
+                                <!-- Story Presets Control Panel -->
+                                <div class="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
+                                    <div class="flex items-center gap-2 text-indigo-800 text-sm font-bold mb-2">
+                                        <i data-lucide="book-open" class="w-4 h-4"></i>
+                                        ตัวช่วยแต่งเรื่องอัตโนมัติ (Story Generator):
+                                    </div>
+                                    
+                                    <div class="flex flex-col md:flex-row gap-3 items-end">
+                                        <div class="flex-1 w-full">
+                                            <label class="text-xs text-indigo-600 font-semibold ml-1">เลือกธีมเรื่อง:</label>
+                                            <select id="storyPreset" class="w-full text-sm border-indigo-200 rounded px-2 py-2 text-indigo-900 focus:ring-2 focus:ring-indigo-300 outline-none bg-white">
+                                                <option value="consult">1. Consultation (มาตรฐานทั่วไป)</option>
+                                                <option value="mechanism">2. Mechanism (กลไกการออกฤทธิ์)</option>
+                                                <option value="myth">3. Myth Buster (แก้ความเชื่อผิด)</option>
+                                                <option value="lifestyle">4. Lifestyle Advice (ปรับพฤติกรรม)</option>
+                                            </select>
+                                        </div>
+                                        
+                                        <div class="w-full md:w-32">
+                                            <label class="text-xs text-indigo-600 font-semibold ml-1">จำนวนช่อง:</label>
+                                            <select id="storyLength" class="w-full text-sm border-indigo-200 rounded px-2 py-2 text-indigo-900 focus:ring-2 focus:ring-indigo-300 outline-none bg-white font-bold text-center">
+                                                <option value="3">3 ช่อง</option>
+                                                <option value="4" selected>4 ช่อง</option>
+                                                <option value="5">5 ช่อง</option>
+                                                <option value="6">6 ช่อง</option>
+                                                <option value="7">7 ช่อง</option>
+                                                <option value="8">8 ช่อง</option>
+                                            </select>
+                                        </div>
+
+                                        <button onclick="generateStoryFromPreset()" class="w-full md:w-auto bg-indigo-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-indigo-700 flex items-center justify-center gap-1 transition shadow-sm active:scale-95">
+                                            <i data-lucide="wand-2" class="w-4 h-4"></i> สร้างเรื่อง
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Panel Container -->
+                            <div id="panelContainer" class="space-y-4">
+                                <!-- Panels will be injected here via JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Output & Preview -->
+                    <div class="lg:col-span-5 space-y-6">
+                        
+                        <!-- Sticky Container -->
+                        <div class="sticky top-24 space-y-6">
+                            
+                            <!-- Output Card -->
+                            <div class="bg-slate-900 text-white rounded-xl shadow-lg p-6 border border-slate-700">
+                                <div class="flex items-center justify-between mb-4">
+                                    <h3 class="text-lg font-bold flex items-center gap-2">
+                                        <i data-lucide="sparkles" class="w-5 h-5 text-yellow-400"></i>
+                                        Final Prompt
+                                    </h3>
+                                    <div class="flex gap-2">
+                                        <button onclick="generateFinalPrompt()" class="bg-gradient-to-r from-purple-500 to-pink-600 hover:from-purple-600 hover:to-pink-700 text-white px-4 py-1.5 rounded-lg text-sm font-semibold transition shadow-lg flex items-center gap-1">
+                                            <i data-lucide="wand-2" class="w-4 h-4"></i> Generate
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Include Dialogue Option -->
+                                <div class="flex items-center gap-2 mb-3 bg-slate-800 p-2 rounded border border-slate-700">
+                                    <input type="checkbox" id="includeDialogue" class="w-4 h-4 text-purple-600 rounded focus:ring-purple-500 border-gray-300" checked>
+                                    <label for="includeDialogue" class="text-xs text-slate-300 select-none cursor-pointer">
+                                        แนบบทพูดไปใน Prompt (Include Dialogue Text)
+                                    </label>
+                                </div>
+
+                                <div class="relative">
+                                    <textarea id="finalPrompt" rows="12" class="w-full bg-slate-800 text-slate-300 p-4 rounded-lg border border-slate-600 font-mono text-sm leading-relaxed focus:outline-none focus:border-purple-500 resize-none" placeholder="กดปุ่ม Generate เพื่อสร้าง Prompt..."></textarea>
+                                    
+                                    <button onclick="copyComicPrompt()" class="absolute top-2 right-2 bg-slate-700 hover:bg-slate-600 text-white p-2 rounded-md transition" title="Copy to Clipboard">
+                                        <i data-lucide="copy" class="w-4 h-4"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Preview Structure (Visual Guide) -->
+                            <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
+                                <div class="flex justify-between items-center mb-3">
+                                    <h3 class="text-sm font-bold text-slate-700 flex items-center gap-2">
+                                        <i data-lucide="layout-grid" class="w-4 h-4"></i> Layout Preview
+                                    </h3>
+                                    <span id="previewLabel" class="text-xs bg-slate-100 text-slate-500 px-2 py-1 rounded">Landscape</span>
+                                </div>
+                                
+                                <div id="layoutPreviewWrapper" class="bg-slate-100 p-4 rounded-lg min-h-[100px] flex justify-center items-start">
+                                    <div id="layoutPreview" class="w-full">
+                                        <!-- Dynamic Grid Boxes -->
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- External Module Wrapper -->
+    <div id="moduleWrapper" class="hidden max-w-7xl mx-auto w-full my-0 md:my-4">
+        <div class="bg-white shadow-xl md:rounded-xl border border-gray-200 overflow-hidden">
+            <iframe id="moduleFrame" class="w-full h-[78vh] md:h-[82vh] border-0" src="" title="Module Viewer"></iframe>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast"><i data-lucide="check-circle" class="w-5 h-5 inline mr-1"></i> สร้างเนื้อเรื่องเรียบร้อย!</div>
+
+    <script>
+        // --- GLOBAL STATE ---
+        let currentMode = 'universal';
+        let currentTemplateId = null;
+        let formValues = {};
+        let panels = [];
+        const moduleUrls = {
+            hcp: 'hcpCharacter.html',
+            infographic: 'infographic.html',
+            task: 'task.html',
+            myprompt: 'myprompt.html'
+        };
+
+        // --- DATA CONFIGURATION ---
+        const categories = [
+            { id: 'healthcare', name: 'การแพทย์ & เภสัชกรรม', icon: 'user-doctor' }, 
+            { id: 'marketing', name: 'การตลาด & ธุรกิจ', icon: 'trending-up' },
+            { id: 'edit', name: 'รีทัช & แก้ไขภาพ', icon: 'wand-2' },
+            { id: 'travel', name: 'ท่องเที่ยว & ไลฟ์สไตล์', icon: 'plane' },
+            { id: 'fashion', name: 'แฟชั่น & แฟนตาซี', icon: 'shirt' },
+            { id: 'viral', name: 'ไวรัล & โซเชียล', icon: 'flame' },
+            { id: '3d_art', name: '3D & ศิลปะ', icon: 'box' },
+            { id: 'comic', name: 'คอมมิค & การ์ตูน', icon: 'book-open' }
+        ];
+
+        const templates = {
+            // --- HEALTHCARE ---
+            'health_pharmacy': {
+                cat: 'healthcare', title: 'เภสัชกรชุมชน (Modern Pharmacy)', icon: 'prescription',
+                desc: 'แนบรูปหน้าตรง > ได้ภาพเภสัชกรในร้านยาสมัยใหม่',
+                inputs: [
+                    { id: 'gender', type: 'select', label: 'เภสัชกร', options: [{v:'Male pharmacist', t:'เภสัชกรชาย'}, {v:'Female pharmacist', t:'เภสัชกรหญิง'}] },
+                    { id: 'action', type: 'text', label: 'ท่าทาง (Action)', default: 'holding a medicine box and smiling warmly' }
+                ],
+                basePrompt: (d, adv) => `Professional photography of a ${d.gender} in a white coat standing in a modern, clean, well-lit community pharmacy with shelves of medicines in the background. ${d.action}. Trustworthy, knowledgeable look. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'health_doctor_profile': {
+                cat: 'healthcare', title: 'โปรไฟล์แพทย์ (Doctor Portrait)', icon: 'stethoscope',
+                desc: 'แนบรูปหน้า > ได้ภาพโปรไฟล์แพทย์ชุดกาวน์ มืออาชีพ',
+                inputs: [
+                    { id: 'gender', type: 'select', label: 'เพศ', options: [{v:'male doctor', t:'แพทย์ชาย'}, {v:'female doctor', t:'แพทย์หญิง'}] }
+                ],
+                basePrompt: (d, adv) => `High-end studio portrait of a ${d.gender}, wearing a stethoscope and white coat. Clean neutral background. Confident and compassionate expression. High resolution, detailed skin texture. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'health_conference': {
+                cat: 'healthcare', title: 'งานประชุมวิชาการ (Medical Conf.)', icon: 'mic',
+                desc: 'ระบุหัวข้อ > ได้ภาพบรรยากาศงานประชุมแพทย์',
+                inputs: [
+                    { id: 'topic', type: 'text', label: 'หัวข้อบรรยาย', default: 'Innovation in Pharmacy' },
+                    { id: 'speaker', type: 'select', label: 'ผู้บรรยาย', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] }
+                ],
+                basePrompt: (d, adv) => `Wide shot of a medical conference stage. A ${d.speaker} speaker is presenting on the topic '${d.topic}'. Large LED screen behind displaying medical graphs and DNA structures. Audience of healthcare professionals listening. Professional atmosphere. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'health_infographic': {
+                cat: 'healthcare', title: 'สื่อการสอน 3D (Health Edu)', icon: 'dna',
+                desc: 'ระบุวัตถุ > ได้ภาพ 3D Model สวยๆ ประกอบสไลด์',
+                inputs: [
+                    { id: 'object', type: 'text', label: 'วัตถุที่ต้องการ (Eng)', default: 'Medicine Bottle and Pills' }
+                ],
+                basePrompt: (d, adv) => `3D isometric render of [${d.object}] related to healthcare. Soft pastel colors, clean white background, high quality, educational material style. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+
+            // --- MARKETING ---
+             'mkt_google_poster': {
+                cat: 'marketing', title: 'Google Tech Poster', icon: 'bullhorn',
+                desc: 'แนบรูป > ได้โปสเตอร์ธีม Google นีออน + แผนภาพ',
+                inputs: [
+                    { id: 'header', type: 'text', label: 'หัวข้อหลัก', default: 'ปลดล็อค!! พลัง Gemini 3 Pro' },
+                    { id: 'subhead', type: 'text', label: 'หัวข้อรอง', default: 'เพจ เรียนรู้ AI ไปกับครูหนุ่ม' },
+                    { id: 'gender', type: 'select', label: 'ตัวละคร', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] }
+                ],
+                basePrompt: (d, adv) => `Horizontal poster, Modern-Tech design, Google colors (Blue, Red, Yellow, Green), neon holographic effects. Subject: A ${d.gender} attached in reference image (Keep face 100% accurate). Wearing black suit, white t-shirt with letter 'G'. Holographic workflow diagram 'Prompt -> Process -> Output'. Text (Thai): Headline "${d.header}", Sub-headline "${d.subhead}". ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'mkt_youtube': {
+                cat: 'marketing', title: 'ปก YouTube (Thumbnail)', icon: 'youtube',
+                desc: 'แนบรูปตัวอย่างสไตล์ > ได้ปกคลิปพร้อมข้อความภาษาไทย',
+                inputs: [
+                    { id: 'title', type: 'text', label: 'พาดหัวคลิป', default: 'เลือก คู่หู AI ยังไงดี?' },
+                    { id: 'gender', type: 'select', label: 'ตัวละคร', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] }
+                ],
+                basePrompt: (d, adv) => `YouTube thumbnail, engaging and high contrast. Thai text "${d.title}". A ${d.gender} showing expressive emotion related to the topic. Colorful background. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'mkt_interior': {
+                cat: 'marketing', title: 'ออกแบบภายใน (Interior)', icon: 'home',
+                desc: 'แนบรูปห้อง > สั่งเปลี่ยนเฟอร์นิเจอร์/สีผนังได้ดั่งใจ',
+                inputs: [
+                    { id: 'change', type: 'text', label: 'สิ่งที่ต้องการเปลี่ยน', default: 'Add a sofa and change wall color to green pastel' }
+                ],
+                basePrompt: (d, adv) => `Interior design edit: ${d.change}. Keep the room perspective correct. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+
+            // --- EDIT ---
+            'edit_restore': {
+                cat: 'edit', title: 'กู้คืนภาพเก่า (Restore)', icon: 'clock-rotate-left',
+                desc: 'แนบภาพเก่า/ไม่ชัด > ทำให้ชัดขึ้น + ลบรอย/ตัวหนังสือ',
+                inputs: [],
+                basePrompt: (d, adv) => `Restore this photo to high quality, sharpen details, remove any text or watermarks. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'edit_colorize': {
+                cat: 'edit', title: 'ลงสีภาพขาวดำ (Colorize)', icon: 'palette',
+                desc: 'แนบภาพขาวดำ > เติมสีให้สมจริงและทันสมัย',
+                inputs: [],
+                basePrompt: (d, adv) => `Colorize this black and white photo. Modernize the clothing and background slightly to look contemporary. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'edit_remove': {
+                cat: 'edit', title: 'ลบคน/วัตถุ (Remove Object)', icon: 'eraser',
+                desc: 'แนบภาพ > สั่งลบสิ่งที่ไม่ต้องการ (AI ถมที่ว่างให้)',
+                inputs: [],
+                basePrompt: (d, adv) => `Remove person or object from image, fill the background naturally. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'edit_shirt': {
+                cat: 'edit', title: 'เปลี่ยนสีเสื้อ (Change Shirt)', icon: 'shirt',
+                desc: 'แนบภาพ > เปลี่ยนลาย/สีเสื้อ โดยไม่เปลี่ยนทรง',
+                inputs: [{ id: 'new_shirt', type: 'text', label: 'สี/แบบเสื้อใหม่', default: 'green t-shirt' }],
+                basePrompt: (d, adv) => `Change the person's shirt to a ${d.new_shirt}. Keep the wrinkles and lighting natural. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'edit_bg': {
+                cat: 'edit', title: 'เปลี่ยนฉากหลัง (Change BG)', icon: 'image',
+                desc: 'แนบภาพ > เปลี่ยนพื้นหลังเป็นสถานที่ใหม่',
+                inputs: [{ id: 'new_bg', type: 'text', label: 'ฉากหลังใหม่', default: 'modern office with city view' }],
+                basePrompt: (d, adv) => `Remove background and replace with ${d.new_bg}. Ensure realistic lighting and perspective matching the subject. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+
+            // --- VIRAL ---
+            'viral_cat': {
+                cat: 'viral', title: 'สัตว์เลี้ยงเซลฟี่ (Pet Selfie)', icon: 'cat',
+                desc: 'แนบรูปหน้า > สัตว์เลี้ยงถือกล้องเซลฟี่ เรายืนเท่ๆ ด้านหลัง',
+                inputs: [
+                    { id: 'animal', type: 'text', label: 'สัตว์เลี้ยง (Animal)', default: 'cute orange cat' },
+                    { id: 'gender', type: 'select', label: 'เพศของเรา', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] }
+                ],
+                basePrompt: (d, adv) => `A ${d.animal} taking a dramatic ultra-wide selfie in the foreground. In the background, the ${d.gender} attached in the uploaded reference image in stylish hiphop fashion posing. Urban setting. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'viral_safari': {
+                cat: 'viral', title: 'ซาฟารี (Safari)', icon: 'paw-print',
+                desc: 'แนบรูปหน้า > ได้ภาพนอนถ่ายรูปคู่ลูกสิงโตในทุ่งหญ้า',
+                inputs: [
+                    { id: 'gender', type: 'select', label: 'เพศ', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] }
+                ],
+                basePrompt: (d, adv) => `Ultra-realistic wildlife photography scene. A ${d.gender} wearing safari clothing lying on grass holding DSLR camera. A playful lion cub sits on the shoulder. African savannah background. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+
+            // --- TRAVEL ---
+            'travel_hike': {
+                cat: 'travel', title: 'เซลฟี่ท่องเที่ยว (Travel Selfie)', icon: 'mountain',
+                desc: 'แนบรูปหน้า > ได้ภาพเซลฟี่ในสถานที่ท่องเที่ยวสวยๆ',
+                inputs: [
+                    { id: 'gender', type: 'select', label: 'เพศ', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] },
+                    { id: 'location', type: 'text', label: 'สถานที่ (Location)', default: 'narrow mountain ridge overlooking a stunning twin bay coastal landscape' },
+                    { id: 'shirtText', type: 'text', label: 'ข้อความบนเสื้อ', default: 'AREZIN' }
+                ],
+                basePrompt: (d, adv) => `Use reference face. Breathtaking high-angle selfie at ${d.location}. Subject: ${d.gender}, wearing plaid shirt open over black tee with text "${d.shirtText}". ${adv.lighting} ${adv.camera} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'travel_park': {
+                cat: 'travel', title: 'พักผ่อนในสวน (Park)', icon: 'trees',
+                desc: 'แนบรูปคู่สัตว์เลี้ยง > ย้ายไปนั่งชิลในสวนสาธารณะ',
+                inputs: [{ id: 'action', type: 'text', label: 'ท่าทาง', default: 'sitting on a bench' }],
+                basePrompt: (d, adv) => `Put this person and the cat in the same pose outside in a beautiful park, ${d.action}. Lush green trees, peaceful atmosphere. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'travel_history': {
+                cat: 'travel', title: 'ย้อนเวลาหาอดีต (Time Travel)', icon: 'clock',
+                desc: 'ระบุพิกัด/วันที่ > สร้างภาพจำลองเหตุการณ์ประวัติศาสตร์',
+                inputs: [
+                    { id: 'latlong', type: 'text', label: 'พิกัด (Lat, Long)', default: '14.3590115, 100.5581691' },
+                    { id: 'date', type: 'text', label: 'วันที่/เวลา (Date)', default: '7 April 1767' }
+                ],
+                basePrompt: (d, adv) => `Give me the most accurate photo image which National Geographic would shoot as documentary, realistic one, of incident at latitude and longitude (${d.latlong}) on ${d.date}. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+
+            // --- FASHION ---
+            'fashion_vs': {
+                cat: 'fashion', title: 'VS Angel Backstage', icon: 'feather',
+                desc: 'แนบรูปหน้า > แปลงโฉมเป็นนางฟ้า Victoria\'s Secret หลังเวที',
+                inputs: [{ id: 'gender', type: 'select', label: 'เพศ', options: [{v:'woman', t:'ผู้หญิง'}, {v:'man', t:'ผู้ชาย'}] }],
+                basePrompt: (d, adv) => `Victoria's Secret style photoshoot. ${d.gender} attached in reference image. Wearing crystal corset and feather wings. Backstage effect. ${adv.lighting || 'Flash photography'} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'fashion_pigeons': {
+                cat: 'fashion', title: 'นกพิราบปารีส (Parisian Pigeons)', icon: 'bird',
+                desc: 'แนบรูปหน้า > ยืนเท่ท่ามกลางฝูงนกบินว่อน ฉากหลังปารีส',
+                inputs: [{ id: 'gender', type: 'select', label: 'เพศ', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] }],
+                basePrompt: (d, adv) => `Cinematic portrait of a ${d.gender} in a long black trench coat surrounded by blurry pigeons flying dramatically. Paris historical building background. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'fashion_newspaper': {
+                cat: 'fashion', title: 'หนังสือพิมพ์ยุโรป (European Morning)', icon: 'newspaper',
+                desc: 'แนบรูปหน้า > ถือหนังสือพิมพ์บังหน้า ฉากหลังตึกยุโรป',
+                inputs: [
+                    { id: 'gender', type: 'select', label: 'เพศ', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] },
+                    { id: 'prop', type: 'text', label: 'อุปกรณ์ (Prop)', default: 'oversized newspaper' }
+                ],
+                basePrompt: (d, adv) => `Hyper-realistic editorial street fashion. A ${d.gender} holding an ${d.prop} in front, leaning against a lamp post. Neo-gothic European building background. Low angle shot. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+
+            // --- 3D & ART ---
+            'art_figure': {
+                cat: '3d_art', title: '3D Figure Box Set', icon: 'box',
+                desc: 'แนบรูปหน้า > แปลงคนเป็นฟิกเกอร์ของเล่นในกล่อง',
+                inputs: [{ id: 'bg_item', type: 'text', label: 'ของประกอบฉาก', default: 'computer with Blender' }],
+                basePrompt: (d, adv) => `Turn photo into Full 3D character figure. Behind it place a box with character's image, and ${d.bg_item}. PVC material. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'art_toon': {
+                cat: '3d_art', title: 'การ์ตูน (Cartoon)', icon: 'mask',
+                desc: 'แนบรูปถ่าย > เปลี่ยนเป็นลายเส้นการ์ตูน Animation',
+                inputs: [],
+                basePrompt: (d, adv) => `Turn this into an animation cartoon style. Colorful and vibrant. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+            'art_comic': {
+                cat: '3d_art', title: 'คอมมิคช่อง (Comic Strip)', icon: 'book-open',
+                desc: 'แนบรูปหน้า > สร้างคอมมิคช่อง เล่าเรื่องราวสนุกๆ',
+                inputs: [
+                    { id: 'activity', type: 'text', label: 'กิจกรรมที่ทำ (Story)', default: 'doing housework, folding clothes, feeding fish' },
+                    { id: 'theme', type: 'text', label: 'ธีม/พลัง (Theme)', default: 'Superhero style with slight superpowers' },
+                    { id: 'layout', type: 'select', label: 'การจัดวาง (Layout)', options: [{v:'Asymmetrical layout, dynamic panels', t:'แบบไดนามิก (Dynamic)'}, {v:'Classic grid layout', t:'ตารางมาตรฐาน (Grid)'}, {v:'Manga style layout', t:'สไตล์มังงะ (Manga)'}] }
+                ],
+                basePrompt: (d, adv) => `Make a comic strip of the person attached in reference image ${d.activity}. High energy, cheerful smile. Theme: ${d.theme}. Layout: ${d.layout}. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+            },
+
+            // --- COMIC STUDIO TEMPLATES ---
+            'comic_medical': {
+                cat: 'comic', title: 'คอมมิคการแพทย์ (Medical Comic)', icon: 'book-open',
+                desc: 'สร้างคอมมิคการศึกษาทางการแพทย์ด้วยระบบ SCQA',
+                inputs: []
+            }
+        };
+
+        const charPresets = {
+            'doctor_m': 'A handsome Asian male doctor, approx 35 years old, wearing sleek glasses, short neat black hair. He wears a smart pink blazer over a crisp white shirt. Friendly and professional appearance.',
+            'doc_f': 'A professional female doctor, long black hair tied in a ponytail, wearing a white medical coat over a blue blouse. Kind eyes, wearing a stethoscope around neck.',
+            'pharma_m': 'A young male pharmacist, short hair, wearing a white pharmacist gown with a green cross badge. Standing in a modern pharmacy setting.',
+            'bear_no_glasses': 'A cute anthropomorphic bear pharmacist character, white fur, wearing a professional green pharmacist gown. Friendly, soft lighting, 3D render style.',
+            'bear_glasses': 'A smart anthropomorphic bear pharmacist character, white fur, wearing round glasses and a professional green pharmacist gown. Holding a clipboard, knowledgeable look.'
+        };
+
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+            
+            // Initialize Universal Mode
+            renderSidebar();
+            const firstKey = Object.keys(templates).find(key => templates[key].cat !== 'comic');
+            if (firstKey) selectTemplate(firstKey);
+            
+            // Initialize Comic Mode
+            document.getElementById('charDesc').value = charPresets['bear_glasses']; 
+            panels = generateConsultStory(4).map((p, i) => ({...p, id: Date.now() + i}));
+            renderPanels();
+            updatePreviewLayout();
+
+            // Set initial mode
+            switchMode('universal');
+        });
+
+        // --- MODE SWITCHING ---
+        function switchMode(mode) {
+            currentMode = mode;
+            const sidebar = document.getElementById('sidebar');
+            const primaryApp = document.getElementById('primaryApp');
+            const moduleWrapper = document.getElementById('moduleWrapper');
+            const moduleFrame = document.getElementById('moduleFrame');
+            
+            // Update UI
+            document.querySelectorAll('.mode-tab').forEach(tab => tab.classList.remove('active'));
+            const activeBtn = document.getElementById(mode + 'Mode');
+            if (activeBtn) activeBtn.classList.add('active');
+            
+            if (mode === 'universal' || mode === 'comic') {
+                primaryApp.classList.remove('hidden');
+                moduleWrapper.classList.add('hidden');
+                
+                if (mode === 'universal') {
+                    document.getElementById('universalContent').classList.remove('hidden');
+                    document.getElementById('comicContent').classList.add('hidden');
+                    sidebar.classList.remove('hidden', 'md:hidden');
+                    sidebar.classList.add('md:flex');
+                } else {
+                    document.getElementById('universalContent').classList.add('hidden');
+                    document.getElementById('comicContent').classList.remove('hidden');
+                    sidebar.classList.add('hidden', 'md:hidden');
+                    sidebar.classList.remove('md:flex');
+                }
+            } else {
+                primaryApp.classList.add('hidden');
+                moduleWrapper.classList.remove('hidden');
+                sidebar.classList.add('hidden', 'md:hidden');
+                sidebar.classList.remove('md:flex');
+                const targetUrl = moduleUrls[mode];
+                if (targetUrl && moduleFrame.src !== targetUrl) {
+                    moduleFrame.src = targetUrl;
+                }
+            }
+            
+            // Re-initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        // --- UNIVERSAL MODE FUNCTIONS ---
+        function renderSidebar() {
+            const nav = document.getElementById('categoryNav');
+            nav.innerHTML = categories.map(cat => {
+                const catTemplates = Object.entries(templates).filter(([k,v]) => v.cat === cat.id);
+                if (catTemplates.length === 0) return '';
+                return `
+                    <div class="mb-6">
+                        <div class="text-xs font-bold text-gray-500 uppercase flex items-center gap-2 mb-2 px-2">
+                            <i data-lucide="${cat.icon}" class="w-4 h-4 text-purple-600"></i> ${cat.name}
+                        </div>
+                        <div class="space-y-1 pl-2 border-l-2 border-gray-100 ml-1.5">
+                            ${catTemplates.map(([key, tpl]) => `
+                                <button onclick="selectTemplate('${key}')" id="btn-${key}"
+                                    class="w-full text-left py-2 px-3 rounded-lg hover:bg-purple-50 hover:text-purple-600 transition-all group nav-item">
+                                    <div class="text-[13px] nav-title text-gray-700 group-hover:text-purple-600">${tpl.title}</div>
+                                    <div class="text-[10px] nav-desc text-gray-400 font-light truncate">${tpl.desc}</div>
+                                </button>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Re-initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function selectTemplate(key) {
+            currentTemplateId = key;
+            const tpl = templates[key];
+
+            // Update UI Sidebar
+            document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active-nav'));
+            const btn = document.getElementById(`btn-${key}`);
+            if(btn) btn.classList.add('active-nav');
+
+            // Show Panel
+            document.getElementById('emptyState').classList.add('hidden');
+            document.getElementById('builderPanel').classList.remove('hidden');
+            
+            // Header
+            document.getElementById('builderIcon').innerHTML = `<i data-lucide="${tpl.icon}"></i>`;
+            document.getElementById('builderTitle').innerText = tpl.title;
+            document.getElementById('builderDesc').innerText = tpl.desc;
+
+            // Inputs
+            const inputContainer = document.getElementById('dynamicInputs');
+            inputContainer.innerHTML = '';
+            formValues = {};
+
+            if (tpl.inputs.length === 0) {
+                inputContainer.innerHTML = `<div class="col-span-1 md:col-span-2 text-gray-400 text-sm italic border border-dashed border-gray-200 rounded-xl p-4 text-center bg-gray-50">Prompt นี้พร้อมใช้งาน ไม่ต้องตั้งค่าเพิ่มเติม</div>`;
+            } else {
+                tpl.inputs.forEach(inp => {
+                    formValues[inp.id] = inp.default || (inp.options ? inp.options[0].v : '');
+                    let html = `<div class="input-group ${tpl.inputs.length === 1 ? 'md:col-span-2' : ''}">`;
+                    html += `<label class="block text-[10px] font-bold text-gray-400 uppercase mb-1.5">${inp.label}</label>`;
+                    if(inp.type === 'select') {
+                        html += `<div class="relative"><select onchange="updateValue('${inp.id}', this.value)" class="w-full bg-white border-gray-200 text-gray-700 rounded-lg text-sm focus:ring-purple-500 focus:border-purple-500 shadow-sm appearance-none pl-3 pr-8 py-2.5 cursor-pointer hover:border-purple-300 transition-colors">
+                            ${inp.options.map(o => `<option value="${o.v}" ${o.v === formValues[inp.id]?'selected':''}>${o.t}</option>`).join('')}
+                        </select><div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500"><i data-lucide="chevron-down" class="w-4 h-4"></i></div></div>`;
+                    } else {
+                        html += `<input type="text" value="${formValues[inp.id]}" oninput="updateValue('${inp.id}', this.value)" class="w-full bg-white border-gray-200 text-gray-700 rounded-lg text-sm focus:ring-purple-500 focus:border-purple-500 shadow-sm p-2.5 placeholder-gray-300" placeholder="...">`;
+                    }
+                    html += `</div>`;
+                    inputContainer.innerHTML += html;
+                });
+            }
+
+            // Reset Advanced Inputs
+            document.getElementById('optLighting').value = '';
+            document.getElementById('optStyle').value = '';
+            document.getElementById('optMood').value = '';
+            document.getElementById('optAspect').value = '';
+
+            // Generate
+            updatePrompt();
+            
+            // Re-initialize icons
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        }
+
+        function updateValue(id, val) {
+            formValues[id] = val;
+            updatePrompt();
+        }
+
+        function updatePrompt() {
+            if (!currentTemplateId) return;
+            const tpl = templates[currentTemplateId];
+            const adv = {
+                lighting: document.getElementById('optLighting').value,
+                style: document.getElementById('optStyle').value,
+                mood: document.getElementById('optMood').value,
+                aspect: document.getElementById('optAspect').value
+            };
+            const prompt = tpl.basePrompt(formValues, adv).replace(/\s+/g, ' ').trim();
+            document.getElementById('outputPrompt').value = prompt;
+            document.getElementById('charCount').innerText = prompt.length + ' chars';
+        }
+
+        function copyPrompt() {
+            const txt = document.getElementById("outputPrompt");
+            txt.select();
+            txt.setSelectionRange(0, 99999);
+            
+            const btn = document.getElementById('copyBtn');
+            const originalText = btn.innerHTML;
+
+            // Fallback copy method
+            const copyToClipboard = async () => {
+                try {
+                    // Try normal clipboard API first (might fail in Google Sites iframe)
+                    await navigator.clipboard.writeText(txt.value);
+                    
+                    // Success feedback
+                    btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> คัดลอกแล้ว`;
+                    btn.classList.add('bg-green-500', 'text-white', 'border-transparent');
+                    btn.classList.remove('bg-white/10');
+                    setTimeout(() => {
+                        btn.innerHTML = `<i data-lucide="copy" class="w-4 h-4"></i> คัดลอกโค้ด`;
+                        btn.classList.remove('bg-green-500', 'text-white', 'border-transparent');
+                        btn.classList.add('bg-white/10');
+                        if (typeof lucide !== 'undefined') lucide.createIcons();
+                    }, 2000);
+                } catch (err) {
+                    // Failover to execCommand (better support in iframes)
+                    try {
+                        document.execCommand('copy');
+                        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> คัดลอกแล้ว`;
+                        btn.classList.add('bg-green-500', 'text-white', 'border-transparent');
+                        btn.classList.remove('bg-white/10');
+                        setTimeout(() => {
+                            btn.innerHTML = `<i data-lucide="copy" class="w-4 h-4"></i> คัดลอกโค้ด`;
+                            btn.classList.remove('bg-green-500', 'text-white', 'border-transparent');
+                            btn.classList.add('bg-white/10');
+                            if (typeof lucide !== 'undefined') lucide.createIcons();
+                        }, 2000);
+                    } catch (e) {
+                        console.error('Failed to copy:', e);
+                        alert('ไม่สามารถคัดลอกได้อัตโนมัติ กรุณากด Ctrl+C / Cmd+C');
+                    }
+                }
+            }
+            
+            copyToClipboard();
+        }
+
+        // --- COMIC MODE FUNCTIONS ---
+        function generateStoryFromPreset() {
+            try {
+                const theme = document.getElementById('storyPreset').value;
+                const length = parseInt(document.getElementById('storyLength').value);
+                
+                let newPanels = [];
+                
+                if (theme === 'consult') {
+                    newPanels = generateConsultStory(length);
+                } else if (theme === 'mechanism') {
+                    newPanels = generateMechanismStory(length);
+                } else if (theme === 'myth') {
+                    newPanels = generateMythStory(length);
+                } else if (theme === 'lifestyle') {
+                    newPanels = generateLifestyleStory(length);
+                }
+
+                // Add IDs
+                panels = newPanels.map((p, i) => ({...p, id: Date.now() + i}));
+                renderPanels();
+                
+                // Smart auto-layout hint
+                if(length === 4 || length === 6 || length === 8) {
+                    if(document.getElementById('ratioSelect').value === 'landscape') {
+                        // Keep landscape, user can change manually if needed
+                    }
+                }
+                updatePreviewLayout();
+                showToast("สร้างเรื่องเรียบร้อย! (" + length + " ช่อง)");
+
+            } catch (error) {
+                console.error("Error generating story:", error);
+                alert("เกิดข้อผิดพลาดในการสร้างเรื่อง โปรดรีเฟรชแล้วลองใหม่ครับ");
+            }
+        }
+
+        // 1. Consultation Theme Generator
+        function generateConsultStory(n) {
+            let p = [];
+            p.push({type:'S', action:'Doctor sitting at desk, smiling warmly at the patient.', text:'สวัสดีครับ วันนี้เป็นอะไรมาครับ?'});
+            
+            if(n >= 4) p.push({type:'C', action:'Patient holding their stomach/head, expression of pain.', text:'ปวดตรงนี้มากเลยครับ เป็นมา 2 วันแล้ว'});
+            if(n >= 6) p.push({type:'C', action:'Patient explaining more details, looking worried.', text:'กินยาก็ไม่หาย กังวลมากเลยครับ'});
+            if(n >= 8) p.push({type:'Q', action:'Doctor checking pulse or temperature.', text:'ขอหมอตรวจเบื้องต้นหน่อยนะครับ...'});
+            
+            p.push({type:'Q', action:'Doctor using a stethoscope or explaining diagnosis.', text:'หมอขอตรวจดูหน่อยนะครับ... อ๋อ อาการนี้เกิดจาก...'});
+            
+            if(n === 5 || n === 7) p.push({type:'A', action:'Doctor explaining the medicine mechanism briefly.', text:'ยาตัวนี้จะช่วยลดอาการอักเสบได้ครับ'});
+            
+            p.push({type:'A', action:'Doctor handing medication to the patient, explaining usage.', text:'ทานยานี้หลังอาหารนะครับ พักผ่อนเยอะๆ'});
+            
+            if(n >= 7) p.push({type:'A', action:'Doctor giving additional lifestyle advice.', text:'ช่วงนี้งดของหมักดองด้วยนะครับ'});
+            if(n >= 3) p.push({type:'A', action:'Patient looking relieved/happy, bowing thank you.', text:'ขอบคุณมากครับหมอ สบายใจขึ้นเยอะเลย'});
+            
+            return fitToSize(p, n); 
+        }
+
+        // 2. Mechanism Theme Generator
+         function generateMechanismStory(n) {
+            let p = [];
+            p.push({type:'S', action:'Zoom in on body part. Cartoon germs/virus looking mean.', text:'นี่คือตัวการที่ทำให้คุณป่วย!'});
+            if(n >= 4) p.push({type:'C', action:'Character looking sick, sweating, suffering.', text:'โอ๊ยย ไม่ไหวแล้ว ทรมานจังเลย'});
+            if(n >= 6) p.push({type:'C', action:'Internal view: Germs attacking healthy cells.', text:'(เชื้อโรคกำลังโจมตีร่างกาย)'});
+            p.push({type:'Q', action:'Doctor introducing the product like a hero item.', text:'ไม่ต้องห่วง! ตัวช่วยนี้จะเข้าไปจัดการปัญหาเอง'});
+            if(n >= 5) p.push({type:'A', action:'Microscopic view: The medicine fighting the germs.', text:'(ยาเข้าต่อสู้กับเชื้อโรค)'});
+            if(n >= 7) p.push({type:'A', action:'Microscopic view: Germs being defeated/running away.', text:'(เชื้อโรคแพ้พ่าย)'});
+            if(n >= 8) p.push({type:'A', action:'Internal view: Cells becoming healthy and pink again.', text:'(เซลล์ร่างกายฟื้นฟู)'});
+            p.push({type:'A', action:'Character looking fresh, strong, thumbs up.', text:'หายดีแล้ว! กลับมาใช้ชีวิตได้ปกติเลยครับ'});
+            return fitToSize(p, n);
+        }
+
+        // 3. Myth Buster Theme Generator
+        function generateMythStory(n) {
+            let p = [];
+            p.push({type:'S', action:'Person doing something wrong (e.g. taking meds with milk).', text:'กินยาพร้อมนมแบบนี้แหละ ง่ายดี'});
+            p.push({type:'C', action:'Pharmacist runs in with a STOP sign gesture.', text:'เดี๋ยวครับ! ทำแบบนั้นไม่ได้นะ!'});
+            if(n >= 5) p.push({type:'C', action:'Person looks confused/shocked.', text:'อ้าว ทำไมล่ะครับ? ใครๆ เขาก็ทำกัน'});
+            p.push({type:'Q', action:'Pharmacist explaining with a diagram (X mark).', text:'นมจะไปจับตัวยา ทำให้ยาดูดซึมไม่ได้ครับ'});
+            if(n >= 6) p.push({type:'Q', action:'Diagram showing the correct way (Water vs Milk).', text:'ดูนี่นะครับ แคลเซียมในนมจะขัดขวางยา'});
+            if(n >= 7) p.push({type:'A', action:'Pharmacist holding a glass of water, smiling.', text:'ควรทานกับน้ำเปล่าสะอาด ดีที่สุดครับ'});
+            if(n >= 8) p.push({type:'A', action:'Pharmacist giving a summary tip.', text:'จำไว้นะครับ ยาฆ่าเชื้อห้ามกินพร้อมนม'});
+            p.push({type:'A', action:'Person drinking water instead, nodding approval.', text:'อ๋อ เข้าใจแล้วครับ ต่อไปจะทำตามนี้เลย!'});
+            return fitToSize(p, n);
+        }
+
+        // 4. Lifestyle Theme Generator
+        function generateLifestyleStory(n) {
+            let p = [];
+            p.push({type:'S', action:'Character doing bad habit (eating late/working hard).', text:'(พฤติกรรมเสี่ยง)'});
+            p.push({type:'C', action:'Character feeling symptoms (pain/dizzy).', text:'รู้สึกไม่ดีเลย... เป็นอะไรเนี่ย'});
+            if(n >= 5) p.push({type:'C', action:'Character trying wrong solution (sleeping it off but failing).', text:'นอนพักก็ไม่หาย ทำไงดี'});
+            p.push({type:'Q', action:'Doctor pointing to a chart/clock/food.', text:'นอกจากทานยา ต้องปรับพฤติกรรมด้วยนะครับ'});
+            if(n >= 6) p.push({type:'A', action:'Visual of "Do This" (Eating veggies/Exercise).', text:'1. เลือกทานอาหารที่มีประโยชน์'});
+            if(n >= 7) p.push({type:'A', action:'Visual of "Don\'t Do This" (No alcohol/No late night).', text:'2. งดมื้อดึกและแอลกอฮอล์'});
+            if(n >= 8) p.push({type:'A', action:'Visual of "Sleep" (Clock showing 10PM).', text:'3. เข้านอนให้เป็นเวลา'});
+            p.push({type:'A', action:'Character looking healthy and energetic.', text:'ปรับตัวแล้ว ชีวิตดีขึ้นเยอะเลย!'});
+            return fitToSize(p, n);
+        }
+
+        function fitToSize(arr, n) {
+            if (arr.length > n) {
+                let newArr = arr.slice(0, n-1);
+                newArr.push(arr[arr.length-1]);
+                return newArr;
+            }
+            while(arr.length < n) {
+                let last = arr[arr.length-1];
+                arr.push({...last, text: '...'});
+            }
+            return arr;
+        }
+
+        function renderPanels() {
+            const container = document.getElementById('panelContainer');
+            container.innerHTML = '';
+            
+            panels.forEach((panel, index) => {
+                const panelHTML = `
+                    <div class="panel-card bg-slate-50 border border-slate-200 rounded-lg p-4 relative group">
+                        <div class="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition flex gap-1">
+                            <button onclick="movePanel(${index}, -1)" class="p-1 hover:bg-slate-200 rounded text-slate-500" ${index === 0 ? 'disabled' : ''}><i data-lucide="arrow-up" class="w-4 h-4"></i></button>
+                            <button onclick="movePanel(${index}, 1)" class="p-1 hover:bg-slate-200 rounded text-slate-500" ${index === panels.length - 1 ? 'disabled' : ''}><i data-lucide="arrow-down" class="w-4 h-4"></i></button>
+                            <button onclick="deletePanel(${index})" class="p-1 hover:bg-red-100 text-red-500 rounded"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 mb-3">
+                            <span class="bg-slate-800 text-white text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full">${index + 1}</span>
+                            <select onchange="updatePanel(${index}, 'type', this.value)" class="text-xs border rounded px-2 py-1 font-semibold outline-none ${getSCQAColorClass(panel.type)}">
+                                <option value="S" ${panel.type === 'S' ? 'selected' : ''}>S - Situation</option>
+                                <option value="C" ${panel.type === 'C' ? 'selected' : ''}>C - Complication</option>
+                                <option value="Q" ${panel.type === 'Q' ? 'selected' : ''}>Q - Question</option>
+                                <option value="A" ${panel.type === 'A' ? 'selected' : ''}>A - Answer</option>
+                            </select>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                            <div>
+                                <label class="text-xs font-semibold text-slate-500 uppercase">Visual / Action</label>
+                                <textarea oninput="updatePanel(${index}, 'action', this.value)" rows="2" class="w-full text-sm p-2 border border-slate-300 rounded focus:border-purple-500 focus:outline-none" placeholder="ทำอะไร...">${panel.action}</textarea>
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold text-slate-500 uppercase flex justify-between">
+                                    <span>Speech / Text</span>
+                                </label>
+                                <textarea oninput="updatePanel(${index}, 'text', this.value)" rows="2" class="w-full text-sm p-2 border border-slate-300 rounded focus:border-blue-500 focus:outline-none" placeholder="พูดว่า...">${panel.text}</textarea>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                container.insertAdjacentHTML('beforeend', panelHTML);
+            });
+            
+            if (typeof lucide !== 'undefined') lucide.createIcons();
+            renderPreviewBoxes();
+        }
+
+        function updatePreviewLayout() {
+            const ratio = document.getElementById('ratioSelect').value;
+            const preview = document.getElementById('layoutPreview');
+            const label = document.getElementById('previewLabel');
+            
+            preview.className = ''; 
+            
+            if (ratio === 'landscape') {
+                preview.classList.add('preview-grid-landscape');
+                if(panels.length > 4) preview.classList.add('many-items');
+                label.innerText = "Landscape (16:9)";
+            } else if (ratio === 'portrait') {
+                preview.classList.add('preview-grid-portrait');
+                label.innerText = "Webtoon Strip (Vertical)";
+            } else if (ratio === 'square') {
+                preview.classList.add('preview-grid-square');
+                label.innerText = "Square (1:1)";
+            } else if (ratio === 'grid_2col') {
+                const rows = Math.ceil(panels.length / 2);
+                label.innerText = `Vertical Grid (2 Cols x ${rows} Rows)`;
+                preview.classList.add('preview-grid-2col');
+            }
+            
+            renderPreviewBoxes();
+        }
+
+        function renderPreviewBoxes() {
+            const preview = document.getElementById('layoutPreview');
+            preview.innerHTML = '';
+             panels.forEach((panel, index) => {
+                 const previewHTML = `
+                    <div class="bg-white border border-slate-300 rounded p-2 flex flex-col justify-between shadow-sm relative overflow-hidden h-24 w-full">
+                        <div class="absolute top-0 left-0 w-1 h-full ${getSCQABorderClass(panel.type)}"></div>
+                        <span class="text-[10px] text-slate-400 font-bold self-end">#${index + 1}</span>
+                        <div class="text-[10px] text-slate-600 leading-tight line-clamp-2 text-center italic">"${panel.action.substring(0, 30)}..."</div>
+                        <div class="mt-1 bg-slate-100 rounded px-1 py-0.5 text-[9px] text-slate-500 text-center truncate">💬 ${panel.text || '...'}</div>
+                    </div>
+                `;
+                preview.insertAdjacentHTML('beforeend', previewHTML);
+            });
+        }
+
+        function getSCQAColorClass(type) {
+            switch(type) {
+                case 'S': return 'scqa-s border-blue-200';
+                case 'C': return 'scqa-c border-red-200';
+                case 'Q': return 'scqa-q border-yellow-200';
+                case 'A': return 'scqa-a border-green-200';
+                default: return 'bg-slate-100 text-slate-700 border-slate-200';
+            }
+        }
+
+        function getSCQABorderClass(type) {
+            switch(type) {
+                case 'S': return 'bg-blue-600';
+                case 'C': return 'bg-red-600';
+                case 'Q': return 'bg-yellow-500';
+                case 'A': return 'bg-green-600';
+                default: return 'bg-slate-300';
+            }
+        }
+
+        function addPanel() {
+            let lastType = panels.length > 0 ? panels[panels.length-1].type : 'S';
+            let newType = 'S';
+            if (lastType === 'S') newType = 'C';
+            else if (lastType === 'C') newType = 'Q';
+            else if (lastType === 'Q') newType = 'A';
+            else if (lastType === 'A') newType = 'A'; 
+            panels.push({ id: Date.now(), type: newType, action: '', text: '' });
+            renderPanels();
+        }
+
+        function deletePanel(index) {
+            if (panels.length > 1) {
+                panels.splice(index, 1);
+                renderPanels();
+            } else {
+                alert("ต้องมีอย่างน้อย 1 ช่องครับ");
+            }
+        }
+
+        function movePanel(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex >= 0 && newIndex < panels.length) {
+                [panels[index], panels[newIndex]] = [panels[newIndex], panels[index]];
+                renderPanels();
+            }
+        }
+
+        function updatePanel(index, field, value) {
+            panels[index][field] = value;
+        }
+
+        function setChar(presetKey) {
+            document.getElementById('charDesc').value = charPresets[presetKey];
+        }
+
+        function generateFinalPrompt() {
+            const style = document.getElementById('styleSelect').value;
+            const charDesc = document.getElementById('charDesc').value.trim() || "A generic character";
+            const ratio = document.getElementById('ratioSelect').value;
+            const language = document.getElementById('langSelect').value;
+            const panelCount = panels.length;
+            const includeDialogue = document.getElementById('includeDialogue').checked;
+            
+            let layout = "";
+            if (ratio === 'portrait') {
+                 layout = `Vertical strip layout (Webtoon style), 1 column, ${panelCount} panels.`;
+            } else if (ratio === 'square') {
+                 layout = `Square grid layout, ${panelCount} panels.`;
+            } else if (ratio === 'grid_2col') {
+                layout = `Grid layout, ${panelCount} panels, clean borders.`; 
+            } else {
+                layout = `Horizontal comic strip, ${panelCount} panels.`;
+            }
+
+            let prompt = `Create a comic. [LAYOUT]: ${layout} [STYLE]: ${style} \n\n`;
+            prompt += `[MAIN CHARACTER]: ${charDesc} \n(IMPORTANT: Maintain character consistency in ALL panels).\n\n`;
+            
+            prompt += `[PANEL DETAILS]:\n`;
+            panels.forEach((p, i) => {
+                const panelNum = i + 1;
+                let moodNote = "";
+                if (p.type === 'S') moodNote = " (Mood: Neutral/Everyday Life)";
+                if (p.type === 'C') moodNote = " (Mood: Tense/Worried/Problematic)";
+                if (p.type === 'Q') moodNote = " (Mood: Realization/Hope/Turning Point)";
+                if (p.type === 'A') moodNote = " (Mood: Happy/Relieved/Solution/Bright)";
+
+                prompt += `Panel ${panelNum}: ${p.action}.${moodNote} `;
+                
+                // --- TOGGLE LOGIC ---
+                if (includeDialogue) {
+                    prompt += `Speech bubble text (${language}): "${p.text}". `;
+                } else {
+                    prompt += `Includes an empty speech bubble. `;
+                }
+                
+                prompt += `\n`;
+            });
+
+            prompt += `\n[TECHNICAL]: High resolution, consistent character details, clear text rendering.`;
+            const outputBox = document.getElementById('finalPrompt');
+            outputBox.value = prompt;
+            outputBox.classList.add('ring-2', 'ring-purple-500');
+            setTimeout(() => outputBox.classList.remove('ring-2', 'ring-purple-500'), 500);
+        }
+
+        function copyComicPrompt() {
+            const copyText = document.getElementById("finalPrompt");
+            copyText.select();
+            document.execCommand("copy");
+            alert("คัดลอก Prompt แล้วครับ! นำไปวางใน nano banana หรือ Midjourney ได้เลย");
+        }
+
+        function showToast(message) {
+            var x = document.getElementById("toast");
+            x.className = "show";
+            x.innerText = message;
+            if (typeof lucide !== 'undefined') {
+                x.innerHTML = `<i data-lucide="check-circle" class="w-5 h-5 inline mr-1"></i> ${message}`;
+                lucide.createIcons();
+            }
+            setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+        }
+
+        // Search functionality
+        document.getElementById('searchInput')?.addEventListener('input', function(e) {
+            const searchTerm = e.target.value.toLowerCase();
+            const buttons = document.querySelectorAll('.nav-item');
+            
+            buttons.forEach(btn => {
+                const title = btn.querySelector('.nav-title').textContent.toLowerCase();
+                const desc = btn.querySelector('.nav-desc').textContent.toLowerCase();
+                
+                if (title.includes(searchTerm) || desc.includes(searchTerm)) {
+                    btn.style.display = 'block';
+                } else {
+                    btn.style.display = 'none';
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

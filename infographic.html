@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>แนวทางการสร้าง Dashboard ด้วย AI | สรุปให้ที</title>
+    <!-- Import Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Import Inter font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@400;600;700&display=swap">
+    <style>
+        /* Apply Sarabun font (a good Thai font) as the default */
+        body {
+            font-family: 'Sarabun', sans-serif;
+            background-color: #f3f4f6; /* Light gray background */
+        }
+        /* Style for code blocks in tables */
+        pre {
+            background-color: #f3f4f6; /* Light gray bg for code */
+            border-radius: 8px;
+            padding: 12px;
+            overflow-x: auto; /* Allow horizontal scroll for long code */
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.9em;
+            color: #1f2937; /* Dark gray text */
+        }
+        /* Table styling */
+        th {
+            background-color: #f9fafb; /* Very light gray for table headers */
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Main Container -->
+    <div class="container mx-auto max-w-5xl p-6 md:p-10 space-y-10">
+
+        <!-- Header Section -->
+        <header class="text-center">
+            <h1 class="text-3xl md:text-4xl font-bold text-blue-800 mb-3">
+                สร้าง Dashboard อย่างมืออาชีพด้วย AI
+            </h1>
+            <p class="text-lg text-gray-600">
+                สรุปหลักการ, เครื่องมือ, และ Prompt จากคลาส Business Intelligence
+            </p>
+        </header>
+
+        <!-- Section 1: Introduction (หลักการ) -->
+        <section class="bg-white p-6 md:p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-blue-700 mb-4">
+                หลักการ: ทำไมต้องใช้ AI ช่วยออกแบบ Dashboard?
+            </h2>
+            <p class="text-gray-700 leading-relaxed">
+                ในยุค Data-Driven การมี Dashboard ที่ดีคือหัวใจสำคัญ แต่การออกแบบ Dashboard ที่ตอบโจทย์ผู้บริหารมักใช้เวลานานและสื่อสารไม่ตรงกัน การใช้ Generative AI (เช่น Gemini, ChatGPT) เข้ามาช่วยเปรียบเสมือนการมี "นักออกแบบต้นแบบ (Prototype Designer) ส่วนตัว"
+            </p>
+            <ul class="list-disc list-inside mt-4 space-y-2 text-gray-700">
+                <li><strong class="font-semibold">ลดเวลา:</strong> สร้างภาพร่าง (Mockup) คุณภาพสูงได้ในไม่กี่วินาที</li>
+                <li><strong class="font-semibold">สื่อสารชัดเจน:</strong> แปลง "ความต้องการ" (เช่น KPIs, ตัวชี้วัด) ให้กลายเป็น "ภาพ" ที่ทุกคนเห็นตรงกัน</li>
+                <li><strong class="font-semibold">ทดลองได้ทันที:</strong> ช่วยให้เราสามารถปรับเปลี่ยน Layout หรือชนิดกราฟได้หลากหลาย จนกว่าจะเจอแบบที่เหมาะสมที่สุดก่อนลงมือสร้างจริง</li>
+            </ul>
+        </section>
+
+        <!-- Section 2: Infographic (หลักการออกแบบ Prompt) -->
+        <section class="bg-white p-6 md:p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-blue-700 mb-8 text-center">
+                Infographic: 4 ขั้นตอนการสร้าง Prompt ที่สมบูรณ์แบบ
+            </h2>
+            <!-- HTML-based Infographic -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6">
+                
+                <!-- Step 1 -->
+                <div class="flex flex-col items-center text-center p-4 bg-blue-50 rounded-lg shadow-sm">
+                    <!-- Heroicon: bullseye -->
+                    <svg class="w-12 h-12 text-blue-600 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h3.75" />
+                    </svg>
+                    <h3 class="text-lg font-semibold text-blue-800">1. กำหนดเป้าหมาย</h3>
+                    <p class="text-sm text-gray-600">ระบุจุดประสงค์ของ Dashboard<br>(เช่น เพื่อติดตามผลประกอบการ)</p>
+                </div>
+
+                <!-- Step 2 -->
+                <div class="flex flex-col items-center text-center p-4 bg-blue-50 rounded-lg shadow-sm">
+                    <!-- Heroicon: users -->
+                    <svg class="w-12 h-12 text-blue-600 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 0 0 2.625.372 9.337 9.337 0 0 0 4.121-.952 4.125 4.125 0 0 0-7.53-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.003c0 1.113.285 2.16.786 3.07M15 19.128c-1.113 0-2.16-.285-3.07-.786v-.003c-1.113 0-2.16.285-3.07.786m6.14 0c-1.113 0-2.16-.285-3.07-.786m3.07.786a9.337 9.337 0 0 0-4.121-.952 4.125 4.125 0 0 0-7.53 2.493M3.375 10.5c0-1.113.285-2.16.786-3.07M3.375 10.5v.003c0 1.113-.285 2.16-.786 3.07M3.375 10.5c1.113 0 2.16.285 3.07.786v.003c1.113 0 2.16-.285 3.07-.786m-6.14 0c1.113 0 2.16.285 3.07.786M3.375 10.5a9.337 9.337 0 0 0 4.121.952 4.125 4.125 0 0 0 7.53-2.493M15 4.878c-1.113 0-2.16.285-3.07.786v-.003c-1.113 0-2.16-.285-3.07-.786m6.14 0c-1.113 0-2.16.285-3.07.786m3.07.786a9.337 9.337 0 0 0-4.121.952 4.125 4.125 0 0 0-7.53-2.493" />
+                    </svg>
+                    <h3 class="text-lg font-semibold text-blue-800">2. ระบุผู้ใช้งาน</h3>
+                    <p class="text-sm text-gray-600">กลุ่มเป้าหมายหลักคือใคร<br>(เช่น ผู้บริหาร, ทีมแพทย์)</p>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="flex flex-col items-center text-center p-4 bg-blue-50 rounded-lg shadow-sm">
+                    <!-- Heroicon: chart-bar -->
+                    <svg class="w-12 h-12 text-blue-600 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 0 1 3 19.875v-6.75ZM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25A1.125 1.125 0 0 1 9.75 19.875V8.625ZM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 0 1-1.125-1.125V4.125Z" />
+                    </svg>
+                    <h3 class="text-lg font-semibold text-blue-800">3. เลือกข้อมูล (KPIs)</h3>
+                    <p class="text-sm text-gray-600">ต้องการดูตัวชี้วัดอะไรบ้าง<br>(เช่น อัตราครองเตียง, รายได้)</p>
+                </div>
+
+                <!-- Step 4 -->
+                <div class="flex flex-col items-center text-center p-4 bg-blue-50 rounded-lg shadow-sm">
+                    <!-- Heroicon: code-bracket -->
+                    <svg class="w-12 h-12 text-blue-600 mb-3" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M17.25 6.75 22.5 12l-5.25 5.25m-10.5 0L1.5 12l5.25-5.25m7.5-3-4.5 16.5" />
+                    </svg>
+                    <h3 class="text-lg font-semibold text-blue-800">4. สั่งการและกำหนดสไตล์</h3>
+                    <p class="text-sm text-gray-600">ระบุ Theme, Layout, และคำสั่ง<br>(เช่น "สร้าง...สไตล์ Modern")</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3: Prompt & Tools Table -->
+        <section class="bg-white p-6 md:p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-blue-700 mb-4">
+                1. ตารางสรุปเครื่องมือและ Prompt สำหรับสร้าง Dashboard
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-max text-left align-top">
+                    <thead class="border-b border-gray-300">
+                        <tr>
+                            <th class="p-3 text-sm font-semibold text-gray-700">หัวข้อ (Topic)</th>
+                            <th class="p-3 text-sm font-semibold text-gray-700">รายละเอียด / คำสั่ง (Description / Prompt)</th>
+                            <th class="p-3 text-sm font-semibold text-gray-700">แหล่งที่มา (Source)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <!-- Row 1: Tool -->
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 font-semibold text-blue-700">เครื่องมือสร้าง Prompt</td>
+                            <td class="p-3 text-gray-700">
+                                เว็บแอปฯ ช่วยร่าง Prompt เพื่อสั่ง AI สร้างภาพ Dashboard Design
+                                <br>
+                                <a href="https://short.bdi.or.th/genPrompt" target="_blank" class="text-blue-600 hover:underline">https://short.bdi.or.th/genPrompt</a>
+                            </td>
+                            <td class="p-3 text-gray-700">BDI</td>
+                        </tr>
+                        <!-- Row 2: Structure -->
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 font-semibold text-blue-700">โครงสร้าง Prompt (Template)</td>
+                            <td class="p-3 text-gray-700">
+                                <pre>1. จุดประสงค์: (เช่น ติดตามยอดขาย)
+2. ผู้ใช้งาน: (เช่น ผอ.โรงพยาบาล, CFO)
+3. ข้อมูล: (KPIs, กราฟที่ต้องการ)
+4. Layout: (เช่น 3x3 grid, หน้าเดียวจบ)
+5. Theme: (เช่น สีฟ้า-ขาว, Professional)
+6. คำสั่ง: "Create a professional executive dashboard design..."</pre>
+                            </td>
+                            <td class="p-3 text-gray-700">BDI</td>
+                        </tr>
+                        <!-- Row 3: Example Prompt -->
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 font-semibold text-blue-700">ตัวอย่าง Prompt (โรงพยาบาล)</td>
+                            <td class="p-3 text-gray-700">
+                                <pre>CRITICAL: Image aspect ratio must be 16:9.
+Create a high-resolution, professional medical executive dashboard design.
+The design must be clean, modern, and easy to read, suitable for hospital executives.
+It should look like a real, functional application screenshot.
+CRITICAL: Use ONLY English language for all text labels, titles, and data descriptions.
+Dashboard Title: "Healthcare Executive Dashboard"
+KPIs: Bed Occupancy Rate, Total Revenue, Patient Satisfaction
+Charts: Show KPIs as cards, a line chart for revenue trend, and a table for AI alerts...</pre>
+                            </td>
+                            <td class="p-3 text-gray-700">BDI/GenAI</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 4: Dashboard Examples Table -->
+        <section class="bg-white p-6 md:p-8 rounded-lg shadow-md">
+            <h2 class="text-2xl font-semibold text-blue-700 mb-4">
+                2. ตารางสรุป Link ตัวอย่าง Dashboard และกรณีศึกษา
+            </h2>
+            <div class="overflow-x-auto">
+                <table class="w-full min-w-max text-left align-top">
+                    <thead class="border-b border-gray-300">
+                        <tr>
+                            <th class="p-3 text-sm font-semibold text-gray-700">กลุ่มเนื้อหา</th>
+                            <th class="p-3 text-sm font-semibold text-gray-700">ชื่อ Dashboard / รายละเอียด</th>
+                            <th class="p-3 text-sm font-semibold text-gray-700">ลิงก์ตัวอย่าง (Link)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-gray-200">
+                        <!-- Case Studies -->
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 font-semibold text-blue-700" rowspan="2">กรณีศึกษาต่างประเทศ</td>
+                            <td class="p-3 text-gray-700">Mater Hospital (Ireland): Executive Dashboard รวม KPI</td>
+                            <td class="p-3 text-gray-700"><a href="https://manitex.ie/wp-content/uploads/2020/12/Manitex-Mater-Hospital-Case-Study-2014-10-01-Final.pdf" target="_blank" class="text-blue-600 hover:underline">Link PDF</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 text-gray-700">Nordic Healthcare Group: เปรียบเทียบ Outcome และ Cost (Stroke)</td>
+                            <td class="p-3 text-gray-700"><a href="https://www.ichom.org/nordic-healthcare-group/visual-dashboard-to-benchmark-outcomes-and-costs-between-hospitals" target="_blank" class="text-blue-600 hover:underline">Link Dashboard</a></td>
+                        </tr>
+                        <!-- Bold BI Examples -->
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 font-semibold text-blue-700" rowspan="5">ตัวอย่างจาก Bold BI (Healthcare)</td>
+                            <td class="p-3 text-gray-700">Hospital Management: ภาพรวมการครองเตียง, รายได้</td>
+                            <td class="p-3 text-gray-700"><a href="https://www.boldbi.com/resources/dashboard-examples/healthcare/hospital-management-dashboard/" target="_blank" class="text-blue-600 hover:underline">Link</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 text-gray-700">Patient Health Monitoring: ติดตามสัญญาณชีพผู้ป่วย</td>
+                            <td class="p-3 text-gray-700"><a href="https://www.boldbi.com/resources/dashboard-examples/healthcare/patient-monitoring-dashboard/" target="_blank" class="text-blue-600 hover:underline">Link</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 text-gray-700">Patient Experience: วิเคราะห์ความพึงพอใจ, เวลารอคอย</td>
+                            <td class="p-3 text-gray-700"><a href="https://www.boldbi.com/resources/dashboard-examples/healthcare/patient-experience-dashboard/" target="_blank" class="text-blue-600 hover:underline">Link</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 text-gray-700">Clinical Trials: ติดตามสถานะการวิจัยทางคลินิก</td>
+                            <td class="p-3 text-gray-700"><a href="https://www.boldbi.com/resources/dashboard-examples/healthcare/clinical-trials-dashboard/" target="_blank" class="text-blue-600 hover:underline">Link</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 text-gray-700">Healthcare Executive: ภาพรวมสำหรับผู้บริหาร (Staff ratio)</td>
+                            <td class="p-3 text-gray-700"><a href="https://www.boldbi.com/resources/dashboard-examples/healthcare/executive-dashboard/" target="_blank" class="text-blue-600 hover:underline">Link</a></td>
+                        </tr>
+                        <!-- Thai Dashboards -->
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 font-semibold text-blue-700" rowspan="3">Dashboard ของไทย</td>
+                            <td class="p-3 text-gray-700">Mental Health (เขต 7): คัดกรองสุขภาพจิต</td>
+                            <td class="p-3 text-gray-700"><a href="https://mhc7.dmh.go.th/mhci-dashboard/" target="_blank" class="text-blue-600 hover:underline">Link</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 text-gray-700">สปสช. (NHSO): คัดกรองไวรัสตับอักเสบบี (HBV)</td>
+                            <td class="p-3 text-gray-700"><a href="https://medata.nhso.go.th/me/public/dashboard/41/117" target="_blank" class="text-blue-600 hover:underline">Link</a></td>
+                        </tr>
+                        <tr class="hover:bg-gray-50">
+                            <td class="p-3 text-gray-700">รวม Dashboard ภาครัฐ (HDC, GovSpending)</td>
+                            <td class="p-3 text-gray-700"><a href="https://hdc.moph.go.th/" target="_blank" class="text-blue-600 hover:underline">HDC</a>, <a href="https://govspending.data.go.th/" target="_blank" class="text-blue-600 hover:underline">GovSpending</a></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="text-center text-sm text-gray-500 mt-10 pb-6">
+            <p>ออกแบบโดยเภสัชกรวิรุณ เวชศิริ www.pharmconnection.net</p>
+        </footer>
+
+    </div>
+
+</body>
+</html>

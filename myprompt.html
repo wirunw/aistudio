@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลัง Prompt ส่วนตัว</title>
+    <!-- โหลด Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- โหลด Feather Icons -->
+    <script src="https://unpkg.com/feather-icons"></script>
+    <style>
+        /* ตั้งค่า font เริ่มต้นและพื้นหลัง */
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=IBM+Plex+Sans+Thai:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'IBM Plex Sans Thai', 'Inter', sans-serif;
+            background-color: #f3f4f6; /* สีเทาอ่อน */
+        }
+        /* ซ่อน scrollbar ของ textarea ที่ใช้คัดลอก */
+        #clipboard-helper {
+            position: absolute;
+            left: -9999px;
+            top: 0;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
+        }
+        /* สไตล์สำหรับปุ่ม filter ที่ถูกเลือก */
+        .filter-btn.active {
+            background-color: #4f46e5; /* สี indigo-600 */
+            color: white;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Textarea ที่ซ่อนไว้สำหรับช่วยในการคัดลอก -->
+    <textarea id="clipboard-helper"></textarea>
+
+    <div class="container max-w-7xl mx-auto p-4 sm:p-8">
+        <!-- ส่วนหัว -->
+        <header class="mb-8">
+            <h1 class="text-4xl font-bold text-gray-900 mb-2">คลัง Prompt ส่วนตัวของคุณ</h1>
+            <p class="text-lg text-gray-600">เลือก Prompt ที่ต้องการ และคัดลอกไปใช้งานหรือปรับแต่งได้ทันที</p>
+        </header>
+
+        <!-- ส่วนปุ่มกรองหมวดหมู่ -->
+        <nav class="mb-8">
+            <div id="category-filters" class="flex flex-wrap gap-3">
+                <!-- ปุ่มหมวดหมู่จะถูกสร้างโดย JavaScript -->
+            </div>
+        </nav>
+
+        <!-- ส่วนแสดงรายการ Prompt -->
+        <main>
+            <div id="prompt-container" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <!-- การ์ด Prompt จะถูกสร้างโดย JavaScript -->
+            </div>
+        </main>
+    </div>
+
+    <script>
+        // 1. ข้อมูล Prompt ทั้งหมด
+        const prompts = [
+            {
+                id: 'b+',
+                category: 'content',
+                title: 'สร้างบทความบล็อกฉบับสมบูรณ์ (b+)',
+                description: 'สร้างโครงร่างเนื้อหา, keywords, H-tags, title, meta description และเขียนเนื้อหาขยายความในแต่ละหัวข้อเป็นภาษาไทย',
+                prompt: `Compose an in-depth content outline for {{the content provided}} in {{Thai LANGUAGE}}. Incorporate primary keywords, extended keywords, a header structure, and topic notes. Following that, create recommended title tags and meta descriptions, adhering to the 70 and 160 character limits respectively. Subsequently, provide some content under each subheading. Elaborate on each listed bullet point with a concise and clear explanation of how to execute or apply each step adhering to 200 words. Organize all this material into a well-structured blog article in {{Thai LANGUAGE}}.`
+            },
+            {
+                id: 'des+',
+                category: 'product',
+                title: 'คำอธิบายผลิตภัณฑ์ (ฉบับเภสัชกร) (des+)',
+                description: 'สร้างคำอธิบายผลิตภัณฑ์ (ยา, เครื่องมือแพทย์, อาหารเสริม) สำหรับผู้ป่วย ความยาวไม่เกิน 150 คำ โดยเภสัชกรผู้เชี่ยวชาญ',
+                prompt: `Based on the product information I provided, can you please help me by:
+
+Role: Experienced pharmacist in Thailand with expertise in describing healthcare products such as medicines, medical devices, and food supplements to patients.
+
+Task: Transform the provided product information into a concise, brief, and professional product description in Thai language, focusing on the key benefits and features that a pharmacist would highlight when recommending the product to patients.
+
+Format: Please create a product description in Thai, with a maximum of 150 words. Ensure the description is clear, concise, and easy for patients to understand. Highlight the most important benefits and features, and maintain a professional tone throughout. If you mention any specific medical or technical terms, please include the English translation in parentheses () after those terms.`
+            },
+            {
+                id: 'des2+',
+                category: 'product',
+                title: 'คำอธิบายผลิตภัณฑ์ (ไม่มีอังกฤษ) (des2+)',
+                description: 'คล้าย des+ แต่เน้นย้ำว่า "ไม่" ต้องมีคำแปลภาษาอังกฤษ ยกเว้นศัพท์เทคนิคที่จำเป็นจริงๆ (มีวงเล็บภาษาอังกฤษ)',
+                prompt: `gpt("Based on the product information I provided, can you please help me by:
+Role: Experienced pharmacist in Thailand with expertise in describing healthcare products such as medicines, medical devices, and food supplements to patients.Task: Transform the provided product information into a concise, brief, and professional product description in Thai language, focusing on the key benefits and features that a pharmacist would highlight when recommending the product to patients.Format: Please create a product description in Thai, with a maximum of 150 words. Ensure the description is clear, concise, and easy for patients to understand. Highlight the most important benefits and features, and maintain a professional tone throughout, don’t provide english description in the response.but If you mention any specific medical or technical terms, please include the English translation in parentheses () after those terms.",D119)`
+            },
+            {
+                id: 'fl+',
+                category: 'diagram',
+                title: 'สร้าง Flowchart (Mermaid Syntax) (fl+)',
+                description: 'สร้าง Mermaid syntax สำหรับ flowchart เพื่อแสดงขั้นตอนการทำงานที่ระบุ (รองรับ draw.io และภาษาไทย/อังกฤษ)',
+                prompt: `Can you provide the mermaid syntax for creating a flowchart that illustrates the workflow of "step we mentioned". Ensure the syntax is compatible with draw.io’s mermaid integration. Use newline characters (\\n) instead of <br> for line breaks within node descriptions, and encapsulate node texts with double quotes to handle both English and Thai languages along with special characters. Specifically, I’m looking for it to be presented as a Mermaid syntax code block to preserve the formatting when copying and pasting.`
+            },
+            {
+                id: 'lit+',
+                category: 'research',
+                title: 'สรุปบทความวิจัย (ฉบับเต็ม) (lit+)',
+                description: 'สรุปบทความวิจัยในรูปแบบตาราง (หัวข้อ, วัตถุประสงค์, วิธี, ผลลัพธ์ ฯลฯ) และย่อหน้าสำหรับ Literature Review (IEEE) (ไทย/อังกฤษ)',
+                prompt: `act as you are information technology researcher, help me summarize the article which these below questions in Thai language 
+
+What is the main topic of the research?
+What is the objective of the research?
+What research methods were used?
+What are the key findings of the research?
+What conclusions and recommendations are presented?
+How is this research significant to the field or society?
+What are the limitations of the research?
+Are there any questions or future research directions suggested? 
+
+please provide the output in tabular form 
+
+and then help me rephrase it into  one short paragraph to be included in section literature review , please mention the article with standard reference method used in IEEE publications , please do both in english and thai`
+            },
+            {
+                id: 'lit2+',
+                category: 'research',
+                title: 'สรุปบทความวิจัย (เพิ่ม Keywords) (lit2+)',
+                description: 'เหมือน lit+ แต่เพิ่มการลิสต์ "คำจำกัดความ (Key definition)" และ "ตัวเลขสำคัญ (Key numbers)" จากบทความ',
+                prompt: `act as you are information technology researcher, help me summarize the article which these below questions in Thai language 
+
+What is the main topic of the research?
+What is the objective of the research?
+What research methods were used?
+What are the key findings of the research?
+What conclusions and recommendations are presented?
+How is this research significant to the field or society?
+What are the limitations of the research?
+Are there any questions or future research directions suggested? 
+
+please provide the output in tabular form 
+
+and then help me rephrase it into  one short paragraph to be included in section literature review , please mention the article with standard reference method used in IEEE publications , please do both in english and thai
+
+and then , please list any key definition of key words on the publication and key numbers, frame work mentioned in the publication`
+            },
+            {
+                id: 'mm+',
+                category: 'diagram',
+                title: 'สร้าง Mind Map (Markdown) (mm+)',
+                description: 'สร้างโครงสร้าง Mind Map ในรูปแบบ Markdown (ลำดับชั้นชัดเจน, มี emoji) เพื่อนำไปใช้ในโปรแกรม MindNode (ภาษาไทย, รายละเอียดเยอะ)',
+                prompt: `Can you create a markdown-formatted structure for a mind map focusing on the content "Provided" ? I need the structure to be clearly hierarchical, suitable for importing into MindNode or similar mind mapping software. Please use bullet points or indented lists to denote the hierarchy levels, starting with the main topic and breaking down into subtopics, tools, and methodologies. Including emojis at the start of each point for visual emphasis is desired, but the overall format must strictly adhere to markdown conventions to ensure compatibility. Specifically, I’m looking for it to be presented as a markdown code block to preserve the formatting when copying and pasting. in Thai language  please give much detail on each branch of the mind map`
+            },
+            {
+                id: 'p+',
+                category: 'content',
+                title: 'เขียนบทความใหม่ (Perplexity & Burstiness) (p+)',
+                description: 'เขียนบทความที่ให้มาใหม่ โดยเน้นความซับซ้อน (Perplexity) และความหลากหลายของประโยค (Burstiness) ให้เหมือนมนุษย์เขียน (ภาษาไทย)',
+                prompt: `re-write the article by this criteria : In crafting written material, it’s essential to pay attention to two key elements: "perplexity" and "burstiness." Perplexity evaluates the intricacy of the text, while burstiness looks at the diversity in sentence structure. Human writing typically exhibits higher burstiness, incorporating a mix of longer or complex sentences and shorter ones. AI-generated sentences, on the other hand, tend to be more consistent. So, as you work on the content request below, make sure to incorporate a suitable degree of perplexity and burstiness, and please use {{thai_LANGUAGE}} as output language. (don’t repeat my command in the prompt)
+
+The content is:`
+            },
+            {
+                id: 'pd+',
+                category: 'product',
+                title: 'คำอธิบายผลิตภัณฑ์ (SEO 300 คำ) (pd+)',
+                description: 'สร้างคำอธิบายผลิตภัณฑ์ 300 คำ (ภาษาไทย) โดย SEO Copywriter เน้นข้อดี, ประโยคไม่เกิน 20 คำ, ไม่ใช้ passive voice, และมี Call to Action',
+                prompt: `Disregard any prior directions. Your role is that of an exceptionally skilled SEO and upscale eCommerce copywriter who is fluent in {{Thai LANGUAGE}}. Compose a 300-word product description in {{Thai LANGUAGE}} using the provided product information. Adhere to the following recommendations:
+
+- Emphasize advantages rather than characteristics
+- Refrain from crafting sentences exceeding 20 words
+- Steer clear of the passive voice
+- Incorporate a call to action in the conclusion
+
+Product information: as provided`
+            },
+            {
+                id: 'pdtb+',
+                category: 'product',
+                title: 'คำอธิบายผลิตภัณฑ์ (ตาราง) (pdtb+)',
+                description: 'สร้างคำอธิบายผลิตภัณฑ์สุขภาพในรูปแบบ "ตาราง" อย่างละเอียด (ชื่อ, ประโยชน์, ส่วนผสม, กลุ่มเป้าหมาย, ความปลอดภัย, CTA) เพื่อให้เภสัชกรใช้',
+                prompt: `Create persuasive and detailed product descriptions in Thai for each healthcare product listed in the provided table . Each description should:
+
+Introduce the Product: Include the name, form, quantity, and any unique packaging features.
+Detail Benefits and Features: Thoroughly explain the health benefits, supported by scientific evidence.
+Advanced Benefits: Discuss psychological or lifestyle advantages related to health improvements.
+Key Ingredients: List and describe the active ingredients with their comprehensive benefits, supported by clinical evidence.
+Target Audience and Scenarios: Define potential users and provide relatable scenarios where the product can be beneficial.
+Safety and Usage: Offer a complete safety profile and detailed instructions for optimal use.
+Additional Features: Elaborate on any extra features and sensory benefits.
+Marketing and Value Proposition: Analyze the market standing of the supplier and the exceptional value of the product.
+Call to Action: End with a compelling recommendation for pharmacists to promote the product based on its benefits and features.
+Ensure that each description is engaging, tailored to empower pharmacists to act as medical representatives, and effective in motivating customers to make a purchase.
+
+Provide the output in tabular form `
+            },
+            {
+                id: 'pic+',
+                category: 'media',
+                title: 'สร้าง Prompt รูปภาพ (Dall-e) (pic+)',
+                description: 'จากบทความที่ให้มา, ลิสต์รูปภาพที่ควรสร้าง 5 รูป และสร้าง Dall-e prompt สำหรับแต่ละรูป (รวมถึง featured image)',
+                prompt: `--- 
+
+from above article, can you help me list 5 picture which I should create to make it as picture to be align with my article. after you list please generate Dall-e prompt for each picture for me to create in Dall-e in other conversation, and also featured image of this post too`
+            },
+            {
+                id: 'pos+',
+                category: 'slides',
+                title: 'สร้างเนื้อหาสไลด์ (สัมมนา 1 สไลด์) (pos+)',
+                description: 'สร้างเนื้อหาสไลด์ในรูปแบบตาราง (1 แถว) สำหรับงานสัมมนา (หัวข้อ, เกี่ยวกับ, Topic 1-2, รายละเอียด Topic 1-2)',
+                prompt: `Please create slide content in tabular form based on the provided content, article, and mindmap focusing on the specified topic. The table should include the following columns:
+
+"Conference Topic" 
+"About Seminar" (30 words or 210 characters or 5 sentences)
+"Topics 1" (2 words or 20 characters) 
+"Detail of topic 1" (give summarize of key content from topic 1 in 2 sentences or 15 words or 100 characters) 
+"Topics 2"
+"Detail of topic 2" (give summarize of key content from topic 2 in 2 sentences or 15 words or 100 characters) 
+
+
+I need only 1 slides, and the content should cover all the important points from the provided content. Please ensure the table fits within a single row per slide and is formatted as a single table.`
+            },
+            {
+                id: 'r+',
+                category: 'content',
+                title: 'สร้างบทความยาว (1350 คำ) (r+)',
+                description: 'สร้างบทความยาว 1350 คำ (ภาษาไทย) จากเนื้อหาและ mind map ที่ให้มา โดยผู้เชี่ยวชาญ (การแพทย์, IT) พร้อมตัวอย่างและแบบฝึกหัด',
+                prompt: `based on from the content I provide and the mind map above about “….. “  can you please help me by
+
+Role: Expert of copywriting in Thailand which has experience in many industry such as Medical, pharmaceutical, IT.
+
+Instruction: please use the content I provided transform into long form article in 1350 words in Thai language which could help readers clearly understand the issue
+
+Detail: arrange the content i provide into 1350 words thai article, please highlight important topic and give some example and finally have some exercise for readers to think at the end of article Output
+
+Format: long form article in Thai language in 1350 words , Please ensure the post reads naturally, balancing professionalism with a conversational tone. If you mention some specific words please also have it in english in blanket () after those specific words`
+            },
+            {
+                id: 'r2+',
+                category: 'content',
+                title: 'สร้างบทความยาว (2000 คำ) (r2+)',
+                description: 'สร้างบทความยาว 2000 คำ (ภาษาไทย) จากเนื้อหาและ mind map ที่ให้มา โดยผู้เชี่ยวชาญ (การแพทย์, IT) พร้อมตัวอย่างและแบบฝึกหัด',
+                prompt: `based on from the content I provide and the mind map above about “….. “  can you please help me by
+
+Role: Expert of copywriting in Thailand which has experience in many industry such as Medical, pharmaceutical, IT.
+
+Instruction: please use the content I provided transform into long form article in 2000 words in Thai language which could help readers clearly understand the issue
+
+Detail: arrange the content i provide into 2000 words thai article, please highlight important topic and give some example and finally have some exercise for readers to think at the end of article Output
+
+Format: long form article in Thai language in 2000 words , Please ensure the post reads naturally, balancing professionalism with a conversational tone. If you mention some specific words please also have it in english in blanket () after those specific words 
+
+you don’t have to write one word thai and then one word in english like this "หาก (If) ผู้ใช้งาน (User) อื่นๆ (Other Users) แก้ไข (Edit) ข้อมูล (Data) ใน (In) Cloud (คลาวด์) ข้อมูล (Data) ในแอปพลิเคชัน (Application) แบบออฟไลน์ (Offline) " , you just use english when it is the key words which readers need to know`
+            },
+            {
+                id: 'r3+',
+                category: 'content',
+                title: 'สร้างบทความ (Storytelling 2000 คำ) (r3+)',
+                description: 'สร้างบทความยาว 2000 คำ (ภาษาไทย) แนว Storytelling จากประสบการณ์ส่วนตัว (จริงใจ, รวมข้อผิดพลาด) พร้อมตัวอย่างและแบบฝึกหัด',
+                prompt: `Based on the content I provide and the mind map above about ’…,’ can you please help me write an article with the following specifications?
+
+Role: Expert copywriter in Thailand with experience in various industries such as Medical, Pharmaceutical, and IT.
+
+Instruction: Please use the content I provide to craft a long-form article of 2000 words in Thai language. The article should take on a storytelling approach, narrating from my personal experiences. It should be sincere, including moments of truth, even if they reflect past mistakes.
+
+Detail: Arrange the content into a 2000-word Thai article. Highlight important topics, provide relevant examples, and include an exercise for readers to reflect on at the end of the article.
+
+Output Format:
+
+Long-form article in Thai language, 2000 words.
+Ensure the article reads naturally, balancing professionalism with a conversational tone.
+Include specific words in English in parentheses () after those words`
+            },
+            {
+                id: 'rs+',
+                category: 'content',
+                title: 'สร้างบทความ (Social Media 800-1000 คำ) (rs+)',
+                description: 'สร้างบทความ 800-1000 คำ (ภาษาไทย) สำหรับ Social Media (แบ่งย่อย, quote, influencer, ถามคำถาม, ภาษาง่าย) ให้อ่านง่ายบนมือถือ',
+                prompt: `Role: Content writing expert with experience in creating engaging and popular content for Thai social media users.
+
+Instruction: Please use the content I provided as a basis to write an interesting and engaging article in Thai, approximately 800-1000 words in length, using techniques that will capture the attention of readers with the aforementioned social media behaviors.
+
+Detail:
+
+Divide the content into interesting subsections, using easy-to-understand, concise, and engaging language suitable for scrolling on mobile devices.
+Include prominent quote snippets to highlight key points that will encourage readers to like and share.
+Mention relevant influencers or celebrities related to the topic to increase credibility and interest.
+Ask questions or raise thought-provoking points that stimulate readers to express their opinions and engage in comments.
+Use simple, emotionally relatable sentences to increase the chances of being shared.
+Output Format: An 800-1000 word Thai language article written in a friendly, conversational style that blends professionalism, making it easy to understand and pleasant for general readers. If specific marketing or business terms are mentioned, please include the English term in parentheses after the Thai term.`
+            },
+            {
+                id: 'sl+',
+                category: 'slides',
+                title: 'สร้างเนื้อหาสไลด์ (คำถาม-คำตอบ) (sl+)',
+                description: 'สร้างเนื้อหาสไลด์ในรูปแบบตาราง (Main Topic, Subtopic (คำถาม), 3-5 Bullet points (คำตอบพร้อม Emoji))',
+                prompt: `please help me make the slide content in tabular form  which the column include : "Main Topic" , "Subtopic" (question about the slide) , "Bullet point 1" , ""Bullet point 2", "Bullet point 3", "Bullet point 4" , "Bullet point 5" ( 3-5 bullet points to answer the questions from Subtopic  (each bullet points is include with Emoji and short info telling sentence)  of this session for me to put in powerpoint presentation`
+            },
+            {
+                id: 'sl1+',
+                category: 'slides',
+                title: 'สร้างเนื้อหาสไลด์ (20 สไลด์) (sl1+)',
+                description: 'สร้างเนื้อหาสไลด์ 20 สไลด์ (ภาษาไทย, รูปแบบตาราง) (Topic, Emoji, Short Detail (มี bullet points ย่อย)) ให้ครอบคลุมเนื้อหาทั้งหมด',
+                prompt: `based on from the content I provide (focus on “…”), please help me make the slide content in "tabular form" which the column include : "Topic" , "Emoji (which reflex the topic) , "short detail" (each detail include with Emoji (first) and follow with many bullet points which are summarize information to support the topic) of this session for me to put in powerpoint presentation , I need 20 slides and make sure that these slide content could cover all the content above. Please use Thai language in the slides , make it in tabular form (not markdown format)`
+            },
+            {
+                id: 'sl2+',
+                category: 'slides',
+                title: 'สร้างเนื้อหาสไลด์ (10 สไลด์, CTA) (sl2+)',
+                description: 'สร้างเนื้อหาสไลด์ 10 สไลด์ (ตาราง) (Topic, Sub-topic (why/how), Emoji, Short Detail (4-5 bullet), Call to Action)',
+                prompt: `Please create slide content in tabular form based on the provided content, article, and mindmap focusing on the "provided" topic. The table should include the following columns:
+
+"Topic" (to tell the key main message which I want to present in this slide)
+"Sub-topic" (one sentence explanation "why" and "how" or something which gives meaning to the "Topic")
+"Emoji" (one emoji that reflects the topic)
+"Short Detail" (4-5 comprehensive bullet points, each starting with emojis and providing in-depth details and insights)
+"Call to Action" (what readers can do with this information).
+I need 10 slides, and the content should cover all the important points from the provided content. Please ensure the table fits within a single row per slide and is formatted as a single table.
+
+don’t forget emoji, and in tabular form (not markdown format)`
+            },
+            {
+                id: 'sl3+',
+                category: 'slides',
+                title: 'สร้างเนื้อหาสไลด์ (10 สไลด์, 3 Emojis) (sl3+)',
+                description: 'สร้างเนื้อหาสไลด์ 10 สไลด์ (ตาราง, ภาษาไทย) (Keyword (ธีม), Topic, Section Description, Emoji, Bullet points, Sub Emoji, Tone Emoji)',
+                prompt: `Please create slide content in tabular form based on the provided content, article, and mindmap focusing on the "provided" topic. The table should include the following columns:
+
+"Keyword" : Key Word Theme to set the tone or focus of the entire presentation(same every slides)
+"Topic" : highlights the main focus of the slide
+"Section Description" : provides additional context or a brief explanation of the section
+"Emoji" : one emoji that reflects the topic
+"Bullet points" : 4-5 comprehensive bullet points, each starting with emojis and providing in-depth details and insights
+"Sub Emoji" : one emoji that reflects the bullet points (it should be differrent with "Emoji")
+"Tone Emoji" : one emoji that reflects Section Description (it should be differrent with "Emoji" and "Sub Emoji)
+
+I need 10 slides, and the content should cover all the important points from the provided content. Please ensure the table fits within a single row per slide and is formatted as "One" single table. and the sequence of the slide should follow the provided content
+
+don’t forget emoji, and in tabular form (not markdown format), please make it in Thai language`
+            },
+            {
+                id: 'sm+',
+                category: 'slides',
+                title: 'สร้างเนื้อหาสไลด์ (4 สไลด์, CTA) (sm+)',
+                description: 'สร้างเนื้อหาสไลด์ 4 สไลด์ (ตาราง) (Topic, Emoji, Short Detail (3-5 bullet), Call to Action) ให้ครอบคลุมเนื้อหา',
+                prompt: `Based on the content I provide, please help me create slide content in "tabular form". The table should include the following columns: "Topic", "Emoji" (one emoji that reflects the topic), "Short Detail" (3-5 bullet points starting with emojis and followed by details), and "Call to Action" (what readers can do with this information). I need 4 slides, and the content should cover all the important points from the provided content. Please ensure the table fits within a single row per slide and is formatted as a single table.
+
+Example Table:
+
+Slide	Topic	Emoji	Short Detail	Call to Action
+1	Introduction to the Topic	🌐	🌐 Brief explanation of the topic<br>🗺️ Importance and relevance<br>🏥 Key points of interest	Learn more about the topic and its significance
+2	Benefits of the Topic	👍	🏥 How it helps<br>💸 Cost savings<br>🔄 Continuous benefits	Consider the advantages and how to implement them
+3	Current Developments	🇹🇭	🏥 Recent advancements<br>📱 Technology used<br>👍 Positive feedback from users	Stay updated with the latest developments and applications
+4	Legal and Policy Issues	⚖️	📜 Regulations and standards<br>🔒 Security concerns<br>✅ Compliance requirements	Understand and follow the related legal and policy guidelines
+Please ensure the content is formatted as a single table, with one row for each slide.`
+            },
+            {
+                id: 'sumv',
+                category: 'research',
+                title: 'สรุปเนื้อหา (5 bullet + ตาราง) (sumv)',
+                description: 'สรุปเนื้อหา 5 bullet points (สำหรับเภสัชกร IT Ph.D.), สกัดข้อมูล (หัวข้อ, วัตถุประสงค์ ฯลฯ) ลงตาราง และเขียนใหม่เป็นบทความ (ไทย)',
+                prompt: `Summarize the content I provide in 5 bullet points (in Thai) for a thai pharmacist (me who know health and study IT for my Ph.D. ) audience 
+
+
+and after that from the content help me extract these items below in thai language 
+
+- What is the main topic of this content?
+- What is the objective of this content?
+- What are the key findings of this content?
+- What conclusions and recommendations are presented?
+- How is this content significant to the field or society?
+- What are the limitations of this content?
+- Are there any questions or future directions suggested? 
+
+please provide the output in tabular form 
+
+and from the summarize please rewrite it in Thai in complete article (have introduction - body - summary) make it interesting with some example from the content`
+            },
+            {
+                id: 'sumv2',
+                category: 'research',
+                title: 'สรุปเนื้อหา (S-C-Q-A Framework) (sumv2)',
+                description: 'สรุปเนื้อหา 5 bullet points (สำหรับเภสัชกร IT Ph.D.), สกัดข้อมูลลงตารางด้วย S-C-Q-A Framework และเขียนใหม่เป็นบทความ (ไทย)',
+                prompt: `Summarize the content I provide in 5 bullet points (in Thai) for a thai pharmacist (me who know health and study IT for my Ph.D. ) audience 
+
+
+and after that from the content help me extract these items below in thai language by using S-C-Q-A Framework (Situation-Complication-Question-Answer):
+
+Situation: Briefly describe the context or background of the video.
+Complication: Mention any challenges or issues discussed.
+Question: State the main question or problem that the video addresses.
+Answer: Provide the conclusion or solution offered in the video.
+
+please provide the output in tabular form 
+
+and from the summarize please rewrite it in Thai in complete article (have introduction - body - summary) make it interesting with some example from the content`
+            },
+            {
+                id: 'tik+',
+                category: 'media',
+                title: 'สร้างสคริปต์ TikTok (3 นาที) (tik+)',
+                description: 'สร้างสคริปต์วิดีโอ TikTok 3 นาที (ตาราง) (Time Stamp, Narrate Script (Thai), Key Word, Emoji (Keyword), Emoji (Detail))',
+                prompt: `from the content provided, please help me make 3 minutes tiktok video script "tabular form" which include column "time stamp", "Narrate Script (Thai)", "key word mentioned" , "emoji as key visual of the key words", "emoji as key visual of the detail describe"`
+            },
+            {
+                id: 'ts+',
+                category: 'media',
+                title: 'สร้าง Key Visuals สำหรับ TikTok (ts+)',
+                description: 'สร้าง Key Visuals 10 ภาพสำหรับ TikTok (9:16) จากเนื้อหาสไลด์ (Background, Headline, Sub-Headline, Bullet Points, Visuals, CTA, Tone Emoji)',
+                prompt: `Please create TikTok key visuals based on the slide content provided, adapting the elements for a vertical video format (9:16 aspect ratio). Each TikTok visual should represent the content of a single slide, using eye-catching design elements to grab attention and convey the main ideas quickly and effectively. Follow the structure below for each TikTok visual:
+
+"Background": Choose a visually appealing background that complements the tone and keyword of the slide. The background should not distract from the main content but enhance the presentation’s aesthetic.
+
+"Main Headline": Use the "Topic" from the slide as the main headline. It should be bold, large, and placed at the top to capture attention immediately.
+
+"Sub-Headline": Include a brief "Section Description" beneath the headline to provide context. Use a smaller font size for the sub-headline.
+
+"Bullet Points": Display 2-3 key bullet points from the original slide. Use emojis as bullet icons to add a playful touch. Ensure each bullet point is short and easy to read, emphasizing key takeaways.
+
+"Visual Elements": Incorporate relevant images, icons, or illustrations that reflect the topic. You can use the "Emoji" and "Sub Emoji" as inspiration for choosing the visuals.
+
+"Call-to-Action (CTA)": Add a brief call-to-action at the bottom, encouraging viewers to like, comment, or follow for more content.
+
+"Tone Emoji": Place the "Tone Emoji" subtly in the design to convey the mood or theme of the visual. It can be positioned as a small element near the headline or the corner of the frame.
+
+Make sure the overall design fits the TikTok style: bright colors, bold fonts, and minimal text on each visual to ensure readability. Create 10 visuals, one for each slide, and adapt the sequence to match the original slide flow.
+
+Please keep the visuals in Thai language`
+            },
+            {
+                id: 'tss+',
+                category: 'media',
+                title: 'สร้างสคริปต์ TikTok (จาก Key Visuals) (tss+)',
+                description: 'สร้างสคริปต์ TikTok 3 นาที (ภาษาไทย) จาก Key Visuals ที่ให้มา (Introduction, Main Content (10 visuals), Conclusion, CTA)',
+                prompt: `Please create a 3-minute TikTok script based on the TikTok key visuals provided. The script should guide the narration for the video, following a natural flow from one visual to the next, ensuring a seamless presentation of the content. Follow the structure below to create an engaging and informative script:
+
+"Introduction" (15-20 seconds):
+
+Start with a hook that grabs attention and introduces the main topic, using the "Main Headline" from the first visual.
+Explain why this topic is relevant or interesting, briefly setting the stage for what viewers can expect in the video.
+"Main Content" (2 minutes 30 seconds):
+
+Narrate through each visual, covering 10 sections in total.
+For each section:
+Begin with a brief mention of the "Main Headline" (the visual’s topic) to transition smoothly.
+Explain the "Sub-Headline" (brief section description) to give context.
+Cover 2-3 bullet points, providing insights, examples, or explanations to add depth. Use conversational language and maintain an energetic tone.
+Make sure to use the "Visual Elements" (emojis, icons) as prompts to keep the content lively and engaging. Mention them naturally, and use them to illustrate key points.
+"Conclusion" (10-15 seconds):
+
+Summarize the key takeaways from the video in a quick recap.
+End with a strong call-to-action (CTA) based on the provided "Call-to-Action" content, encouraging viewers to like, comment, follow, or share the video.
+Add a final remark that leaves a lasting impression or encourages viewers to stay tuned for more.
+Ensure the script is dynamic, concise, and fits the 3-minute format. Use an enthusiastic and friendly tone throughout the script. The content should be in Thai language, following the original slide content and TikTok visuals sequence.`
+            },
+            {
+                id: 'wr+',
+                category: 'content',
+                title: 'สร้างบทความ SEO (1000 คำ) (wr+)',
+                description: 'สร้างบทความ SEO 1000 คำ (ภาษาไทย, markdown) เพื่อแข่งกับคู่แข่ง (เน้นคำสำคัญ, H-tags, เนื้อหาแน่น, ละเอียด)',
+                prompt: `Disregard any prior instructions. Your responses should only be in {{thai language}}. Assume the role of a highly skilled SEO and top-tier copywriter who can fluently speak and write in {{thai language}}. Write an extensive piece around 1000 words. When crafting the article, use {the article provided} and emphasize important words in bold. Pretend that your {{thai language}} writing abilities are exceptional enough to surpass competing websites. Imagine that your content in {{thai language}} is of such high quality that it can outperform other sites. Begin with {start article} tags and conclude with {stop article} tags. Refrain from stating that numerous factors affect search rankings. I am aware that content quality is just one aspect, and your mission is to create the best content possible, not to inform me about general SEO guidelines. I will provide the title "{{PROMPT}}" for an article that we aim to outshine on Google. Then, you must draft an article in a formal "we form" that will help me outperform the given article on Google. Compose a lengthy, fully markdown formatted article in {{Thai language}} that could rank on Google using the same keywords as the target website. The article should be filled with rich, thorough, and highly detailed paragraphs containing abundant information. Do not repeat my prompt. The article must be around 1000 words long. Do not restate my request. Do not offer apologies. Refrain from self-referencing. Avoid generic filler language. Utilize informative subheadings with keyword-rich titles. Be concise and accurate when getting to the point. Do not provide explanations or reasons; simply deliver the best possible article. All output must be in {{thai language}}. The article should be as lengthy as possible, with around 1000 words. Start with {start article} tags and finish with {stop article} tags. Ensure headings are bold and suitable for h tags.`
+            },
+            {
+                id: 'ym+',
+                category: 'media',
+                title: 'สร้างสคริปต์ YouTube (จาก Mind Map) (ym+)',
+                description: 'สร้างสคริปต์ YouTube (ภาษาไทย) จากโครงสร้าง Mind Map (Introduction, Main Sections, Tips, Transitions, Conclusion, CTA)',
+                prompt: `based on the mind map outlining above for a YouTube script. Please create a comprehensive and engaging script based on the mind map structure. The script should follow a natural flow, with a compelling introduction, clear explanations for each section, and a concise conclusion. Please include storytelling elements, examples, and audience engagement techniques where applicable. The goal is to educate the audience and keep them entertained throughout the presentation. Please provide me in thai language
+
+Here’s what to focus on:
+
+Introduction: Start by providing an overview of the main topic and why it’s important or interesting. Set up the context and share the purpose of the video.
+Main Sections: Follow the structure of the mind map to cover each key section or point. Use sub-sections as necessary to dive deeper into each topic. Include anecdotes, statistics, or analogies to make the content more relatable.
+Tips or Steps: If there are actionable steps, provide them in a logical order. Explain any tools, techniques, or principles mentioned in the mind map with clarity and practical examples.
+Transitions: Ensure smooth transitions between different sections to maintain the audience’s attention. Use phrases that signal a shift in topic or emphasis.
+Conclusion: Summarize the key takeaways and reinforce the value of the topic. Encourage viewers to engage with the content by liking, commenting, or subscribing, and suggest additional resources if relevant.`
+            },
+            {
+                id: 'ys+',
+                category: 'slides',
+                title: 'สร้างเนื้อหาสไลด์ (10 สไลด์, จาก Mind Map) (ys+)',
+                description: 'สร้างเนื้อหาสไลด์ 10 สไลด์ (ตาราง, ภาษาไทย) จาก Mind Map (Keyword (ธีม), Topic, Section Description, Emoji, Bullet points, Sub Emoji, Tone Emoji)',
+                prompt: `Please create slide content in a tabular format based on the provided mind map, focusing on the main topic. The table should include the following columns:
+
+"Keyword": A consistent keyword or phrase that sets the tone for the entire presentation (use the same keyword for all slides).
+"Topic": The main focus or title of the slide, based on the key points from the mind map.
+"Section Description": A brief explanation providing context for the slide, highlighting the significance of the topic covered.
+"Emoji": An emoji that reflects the topic or theme of the slide.
+"Bullet Points": 4-5 detailed bullet points for each slide, each starting with an emoji and elaborating on key insights, actions, or details. These bullet points should provide depth and practical information based on the mind map content.
+"Sub Emoji": Another emoji that corresponds with the bullet points, different from the main topic emoji.
+"Tone Emoji": An emoji that represents the tone or mood of the "Section Description," distinct from both "Emoji" and "Sub Emoji."
+The table should include content for 10 slides, ensuring all important points from the mind map are covered. The slides should be sequentially arranged, following the structure of the provided mind map. Format the content in one single table (not markdown format), with one row per slide.
+
+Make sure to include the emojis as specified and create the content in Thai language.`
+            }
+        ];
+
+
+        // 2. หมวดหมู่ (สำหรับสร้างปุ่มกรอง)
+        const categories = {
+            'all': 'ทั้งหมด',
+            'content': 'การสร้างเนื้อหาและบทความ',
+            'product': 'คำอธิบายผลิตภัณฑ์',
+            'research': 'การวิจัยและสรุปผล',
+            'diagram': 'ไดอะแกรมและแผนผัง',
+            'slides': 'งานนำเสนอและสไลด์',
+            'media': 'รูปภาพและวิดีโอ'
+        };
+
+        // 3. Element อ้างอิง
+        const promptContainer = document.getElementById('prompt-container');
+        const categoryFiltersContainer = document.getElementById('category-filters');
+        const clipboardHelper = document.getElementById('clipboard-helper');
+
+        let currentActiveButton = null;
+
+        /**
+         * ฟังก์ชันสำหรับแสดง Prompt บนหน้าเว็บ
+         * @param {string} category - หมวดหมู่ที่จะแสดง ('all' คือทั้งหมด)
+         */
+        function displayPrompts(category) {
+            // ล้าง container
+            promptContainer.innerHTML = '';
+
+            // กรอง prompts ตามหมวดหมู่
+            const filteredPrompts = category === 'all' 
+                ? prompts 
+                : prompts.filter(p => p.category === category);
+
+            // วนลูปสร้างการ์ด
+            filteredPrompts.forEach(prompt => {
+                const card = document.createElement('div');
+                card.className = 'bg-white rounded-xl shadow-lg overflow-hidden flex flex-col transition-all duration-300 hover:shadow-xl';
+                
+                card.innerHTML = `
+                    <div class="p-5 border-b border-gray-200 bg-gray-50">
+                        <h3 class="text-lg font-bold text-gray-900">${prompt.title}</h3>
+                    </div>
+                    <div class="p-5 flex-grow">
+                        <p class="text-gray-600 text-sm">${prompt.description}</p>
+                    </div>
+                    <div class="p-5 bg-gray-50 border-t border-gray-200">
+                        <button 
+                            onclick="copyToClipboard(this, '${prompt.id}')"
+                            class="w-full flex items-center justify-center px-4 py-3 border border-transparent text-sm font-medium rounded-lg text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-all duration-200">
+                            <i data-feather="copy" class="w-4 h-4 mr-2"></i>
+                            <span>คัดลอก Prompt</span>
+                        </button>
+                    </div>
+                `;
+                promptContainer.appendChild(card);
+            });
+
+            // เรียกใช้ Feather Icons เพื่อวาดไอคอน
+            feather.replace();
+        }
+
+        /**
+         * ฟังก์ชันสำหรับคัดลอกข้อความไปยัง Clipboard
+         * @param {HTMLElement} button - ปุ่มที่ถูกคลิก
+         * @param {string} promptId - ID ของ prompt ที่จะคัดลอก
+         */
+        window.copyToClipboard = function(button, promptId) {
+            // ค้นหา prompt text
+            const textToCopy = prompts.find(p => p.id === promptId)?.prompt;
+            if (!textToCopy) return;
+
+            // ใช้ textarea ที่ซ่อนไว้ในการคัดลอก
+            // (วิธีนี้เสถียรกว่า navigator.clipboard ใน iframe)
+            clipboardHelper.value = textToCopy;
+            clipboardHelper.select();
+            clipboardHelper.setSelectionRange(0, 99999); // For mobile devices
+            try {
+                document.execCommand('copy');
+                
+                // แสดงผลตอบรับ
+                const originalHTML = button.innerHTML;
+                button.disabled = true;
+                button.innerHTML = `
+                    <i data-feather="check" class="w-4 h-4 mr-2"></i>
+                    <span>คัดลอกแล้ว!</span>
+                `;
+                feather.replace(); // วาดไอคอน check
+
+                // คืนค่าปุ่มกลับเหมือนเดิม
+                setTimeout(() => {
+                    button.innerHTML = originalHTML;
+                    button.disabled = false;
+                    feather.replace(); // วาดไอคอน copy กลับ
+                }, 2000);
+
+            } catch (err) {
+                console.error('ไม่สามารถคัดลอกได้: ', err);
+                // (ในกรณีนี้ เราอาจจะแสดงข้อความ error)
+            }
+            
+            // ยกเลิกการ select
+            window.getSelection().removeAllRanges();
+            clipboardHelper.value = '';
+        }
+
+        /**
+         * ฟังก์ชันเริ่มต้นการทำงาน (สร้างปุ่ม filter และแสดงผลครั้งแรก)
+         */
+        function init() {
+            Object.entries(categories).forEach(([key, value]) => {
+                const button = document.createElement('button');
+                button.className = 'filter-btn px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 hover:bg-gray-200';
+                button.textContent = value;
+                button.dataset.category = key; // เก็บ key ไว้ใน data attribute
+
+                if (key === 'all') {
+                    button.classList.add('active'); // ตั้งค่า 'ทั้งหมด' เป็น default
+                    currentActiveButton = button;
+                }
+
+                button.onclick = () => {
+                    // จัดการ active state
+                    if (currentActiveButton) {
+                        currentActiveButton.classList.remove('active');
+                    }
+                    button.classList.add('active');
+                    currentActiveButton = button;
+
+                    // กรอง prompt
+                    displayPrompts(key);
+                };
+                categoryFiltersContainer.appendChild(button);
+            });
+
+            // แสดงผลครั้งแรก
+            displayPrompts('all');
+        }
+
+        // เริ่มทำงานเมื่อ DOM โหลดเสร็จ
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

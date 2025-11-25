@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>คลังไอเดีย Prompt สำหรับพนักงานออฟฟิศ</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Noto+Sans+Thai:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Noto Sans Thai', 'Inter', sans-serif;
+        }
+        /* Custom scrollbar for table container */
+        .table-container::-webkit-scrollbar {
+            height: 8px;
+        }
+        .table-container::-webkit-scrollbar-thumb {
+            background-color: #cbd5e1; /* cool-gray-300 */
+            border-radius: 4px;
+        }
+        .table-container::-webkit-scrollbar-track {
+            background-color: #f1f5f9; /* cool-gray-100 */
+        }
+    </style>
+</head>
+<body class="bg-gray-100 text-gray-800">
+
+    <div class="container mx-auto max-w-6xl p-4 sm:p-8 my-10 bg-white rounded-2xl shadow-xl">
+
+        <!-- Header -->
+        <header class="border-b border-gray-200 pb-6 mb-8">
+            <h1 class="text-3xl sm:text-4xl font-bold text-indigo-700">คลังไอเดีย Prompt สำหรับอบรมพนักงานออฟฟิศ</h1>
+            <p class="text-lg text-gray-600 mt-2">Office Worker Workshop</p>
+        </header>
+
+        <!-- Introduction -->
+        <div class="mb-10">
+            <p class="text-gray-700 text-base">
+                เอกสารนี้รวบรวมตัวอย่าง Prompt ที่ออกแบบมาเพื่อการอบรมเชิงปฏิบัติการ (Workshop) โดยแบ่งเป็น 2 ส่วนหลัก:
+            </p>
+            <ol class="list-decimal list-inside mt-2 text-gray-700 space-y-1">
+                <li>**Prompt ตามเนื้องานทั่วไป (By Common Tasks):** ใช้หลักการ RTF (Role, Task, Format) เพื่อให้ผู้เรียนฝึกสร้างคำสั่งที่มีประสิทธิภาพ</li>
+                <li>**Prompt ตามเครื่องมือใน Agenda (By Tools):** แนวทางคำสั่งเฉพาะสำหรับแพลตฟอร์มที่คุณวิรุณจะสอน (NotebookLM, Canva ฯลฯ)</li>
+            </ol>
+        </div>
+
+        <!-- Section 1: RTF Framework -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">ส่วนที่ 1: Prompt ตามเนื้องานทั่วไป (RTF Framework)</h2>
+            <p class="text-gray-600 mb-6">ใช้สำหรับ Session ที่สอนหลักการ RTF (Role, Task, Format) เพื่อให้ผู้เรียนเห็นโครงสร้างที่ชัดเจน</p>
+
+            <!-- Responsive Table Wrapper -->
+            <div class="table-container overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
+                <table class="w-full min-w-[800px] table-auto">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="p-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Use Case (งานที่ใช้)</th>
+                            <th class="p-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Role (บทบาท)</th>
+                            <th class="p-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Task (งานที่สั่ง)</th>
+                            <th class="p-4 text-left text-sm font-semibold text-gray-600 uppercase tracking-wider">Format (รูปแบบผลลัพธ์)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                        <tr>
+                            <td class="p-4 align-top"><strong class="text-indigo-600">1. การร่างอีเมล</strong></td>
+                            <td class="p-4 align-top">ผู้ช่วยผู้จัดการ (Admin Assistant)</td>
+                            <td class="p-4 align-top">ร่างอีเมลแจ้งผู้เข้าร่วมประชุมทุกคน เรื่องการเปลี่ยนแปลงเวลาประชุมกระทันหัน จาก 10:00 เป็น 14:00 น.</td>
+                            <td class="p-4 align-top">อีเมลภาษาทางการ, กระชับ, ชัดเจน, พร้อมขอให้ผู้รับตอบกลับ (RSVP)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 align-top"><strong class="text-indigo-600">2. การสรุปใจความ</strong></td>
+                            <td class="p-4 align-top">เลขานุการการประชุม (Meeting Secretary)</td>
+                            <td class="p-4 align-top">สรุปบทสนทนา/บันทึกการประชุมความยาว 3 หน้านี้ [วางเนื้อหา]</td>
+                            <td class="p-4 align-top">ลิสต์ Bullet Point โดยแบ่งเป็น 3 หัวข้อ: 1. ประเด็นสำคัญ (Key Decisions), 2. ผู้รับผิดชอบ (Action Items), 3. เรื่องที่ต้องคุยต่อ (Follow-ups)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 align-top"><strong class="text-indigo-600">3. การระดมสมอง</strong></td>
+                            <td class="p-4 align-top">คณะทำงานฝ่าย HR/Admin</td>
+                            <td class="p-4 align-top">คิดไอเดีย 5 อย่าง เพื่อจัดกิจกรรม "Happy Friday" ประจำเดือนหน้า โดยเน้นกิจกรรมที่ใช้งบประมาณน้อยและส่งเสริมความสัมพันธ์ในทีม</td>
+                            <td class="p-4 align-top">ตารางที่มี 3 คอลัมน์: 1. ชื่อกิจกรรม, 2. รายละเอียดสั้นๆ, 3. งบประมาณ (น้อย/ปานกลาง/มาก)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 align-top"><strong class="text-indigo-600">4. การวางแผนงาน</strong></td>
+                            <td class="p-4 align-top">เจ้าหน้าที่ฝ่ายบุคคล (HR Officer)</td>
+                            <td class="p-4 align-top">สร้าง Checklist 5 วัน สำหรับการ Onboarding พนักงานใหม่ในตำแหน่ง "เจ้าหน้าที่จัดซื้อ (Procurement Officer)"</td>
+                            <td class="p-4 align-top">Checklist รายวัน (Day 1, Day 2,...) โดยระบุสิ่งที่พนักงานใหม่ต้องเรียนรู้ หรือเอกสารที่ต้องเซ็น</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 align-top"><strong class="text-indigo-600">5. การแปลและปรับภาษา</strong></td>
+                            <td class="p-4 align-top">พนักงานฝ่ายสื่อสารองค์กร (Internal Comms)</td>
+                            <td class="p-4 align-top">แปลประกาศจากภาษาอังกฤษ [วางประกาศ] เป็นภาษาไทย และปรับโทนให้ "เป็นกันเอง" และ "เข้าใจง่าย" สำหรับพนักงานทั่วไป</td>
+                            <td class="p-4 align-top">ข้อความประกาศภาษาไทย 1 ฉบับ</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 align-top"><strong class="text-indigo-600">6. การสกัดข้อมูล</strong></td>
+                            <td class="p-4 align-top">เจ้าหน้าที่ฝ่ายการเงิน (Finance Officer)</td>
+                            <td class="p-4 align-top">อ่านข้อความจากใบแจ้งหนี้ (Invoice Text) นี้ [วางข้อความ]</td>
+                            <td class="p-4 align-top">สกัดข้อมูลเฉพาะ: 1. เลขที่ใบแจ้งหนี้, 2. ชื่อบริษัทคู่ค้า, 3. ยอดรวมสุทธิ, 4. กำหนดชำระเงิน</td>
+                        </tr>
+                        <tr>
+                            <td class="p-4 align-top"><strong class="text-indigo-600">7. การเตรียมการนำเสนอ</strong></td>
+                            <td class="p-4 align-top">หัวหน้าทีม (Team Lead)</td>
+                            <td class="p-4 align-top">ฉันต้องนำเสนอโปรเจกต์ใหม่ใน 5 นาที ช่วยสร้างโครงสร้างสไลด์ (Outline) 5 สไลด์</td>
+                            <td class="p-4 align-top">โครงร่างสไลด์ (Slide Outline) โดยมีหัวข้อและเนื้อหาย่อยในแต่ละสไลด์</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- Section 2: By Specific Tools -->
+        <section>
+            <h2 class="text-2xl font-bold text-gray-800 mb-4">ส่วนที่ 2: Prompt ตามเครื่องมือใน Agenda (By Specific Tools)</h2>
+            <p class="text-gray-600 mb-6">ใช้สำหรับประกอบการสอนในแต่ละ Session ที่เน้นเครื่องมือเฉพาะทาง</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+
+                <!-- Tool 1: NotebookLM -->
+                <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                    <h3 class="text-xl font-semibold text-indigo-700 mb-3">1. NotebookLM (เครื่องมือจัดการความรู้)</h3>
+                    <p class="text-sm text-gray-500 italic mb-4">(ใช้ในการ "ถาม-ตอบ" กับเอกสารที่เราอัปโหลดเข้าไป)</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>"จากเอกสาร Policy การลาพักร้อนที่อัปโหลดไป: พนักงานใหม่ต้องมีอายุงานขั้นต่ำเท่าไหร่ ถึงจะใช้สิทธิ์วันลาได้?"</li>
+                        <li>"สรุปประเด็นสำคัญ 5 ข้อจากไฟล์ 'SOP การจัดซื้อ' ให้หน่อย"</li>
+                        <li>"เปรียบเทียบข้อกำหนดของ 'Vendor A' และ 'Vendor B' จากไฟล์รายงานการประชุม"</li>
+                        <li>"สร้างคำถามที่พบบ่อย (FAQ) 5 ข้อ เกี่ยวกับ 'นโยบายการเบิกค่าเดินทาง' จากเอกสารที่ให้ไป"</li>
+                    </ul>
+                </div>
+
+                <!-- Tool 2: Canva -->
+                <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                    <h3 class="text-xl font-semibold text-indigo-700 mb-3">2. Canva (เครื่องมือสร้างภาพและสไลด์)</h3>
+                    <p class="text-sm text-gray-500 italic mb-4">(ใช้ในการสั่ง AI สร้างภาพประกอบ หรือสร้างสไลด์)</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>"สร้างภาพ Infographic 1 หน้า สรุป 5 ขั้นตอนการประหยัดพลังงานในออฟฟิศ ใช้โทนสีเขียว-ขาว ดูสะอาดตา สไตล์มินิมอล"</li>
+                        <li>"สร้างภาพปกสำหรับ Google Site ในหัวข้อ 'AI for Office Productivity' ขอเป็นภาพสไตล์ Abstract ที่สื่อถึงเทคโนโลยีและสมอง"</li>
+                        <li>"สร้างสไลด์นำเสนอ 8 หน้า จากข้อความนี้ [วางเนื้อหา] ขอเทมเพลตสไตล์ Professional"</li>
+                        <li><strong class="text-red-600">(สำหรับ Bulk Create):</strong> "ฉันมีรายชื่อพนักงาน 50 คนใน Google Sheets ฉันจะใช้ฟีเจอร์ Bulk Create ใน Canva เพื่อสร้างประกาศนียบัตรให้พนักงานทีละคนได้อย่างไร ช่วยบอกขั้นตอน"</li>
+                    </ul>
+                </div>
+
+                <!-- Tool 3: Draw.io -->
+                <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                    <h3 class="text-xl font-semibold text-indigo-700 mb-3">3. Draw.io (เครื่องมือสร้าง Flowchart)</h3>
+                    <p class="text-sm text-gray-500 italic mb-4">(ใช้ในการสั่ง AI สร้างแผนภาพลำดับงาน)</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>"สร้าง Flowchart แสดงกระบวนการ 'ขออนุมัติจัดซื้อ' โดยมีขั้นตอน: 1. ผู้ขอเปิด PR -> 2. หัวหน้าแผนกอนุมัติ -> 3. ฝ่ายจัดซื้อตรวจสอบราคา -> 4. ผู้อำนาจอนุมัติ (Finance) -> 5. ออก PO"</li>
+                        <li>"วาด Flow การทำงานของฉันในวันนี้ให้หน่อย: 1. เรียนรู้ NotebookLM -> 2. สกัดข้อมูลสำคัญ -> 3. สร้างเนื้อหาด้วย ChatGPT -> 4. ออกแบบภาพด้วย Canva -> 5. รวมทุกอย่างใน Google Sites"</li>
+                    </ul>
+                </div>
+
+                <!-- Tool 4: Consensus -->
+                <div class="bg-gray-50 rounded-lg p-6 border border-gray-200">
+                    <h3 class="text-xl font-semibold text-indigo-700 mb-3">4. Consensus (เครื่องมือค้นหางานวิจัย)</h3>
+                    <p class="text-sm text-gray-500 italic mb-4">(**ข้อควรระวัง:** Prompt ควรเป็นภาษาอังกฤษเพื่อผลลัพธ์ที่ดีที่สุด)</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700 font-mono">
+                        <li>"What is the impact of AI on office worker productivity?"</li>
+                        <li>"Compare 'Open Office' vs 'Cubicle' for employee satisfaction."</li>
+                        <li>"Best practices for employee onboarding"</li>
+                    </ul>
+                </div>
+
+                <!-- Tool 5: Google Apps Script -->
+                <div class="bg-gray-50 rounded-lg p-6 border border-gray-200 col-span-1 md:col-span-2">
+                    <h3 class="text-xl font-semibold text-indigo-700 mb-3">5. Google Apps Script (เครื่องมือ Automation)</h3>
+                    <p class="text-sm text-gray-500 italic mb-4">(ใช้ ChatGPT/Gemini ช่วยเขียนโค้ด)</p>
+                    <ul class="list-disc list-inside space-y-2 text-gray-700">
+                        <li>"ช่วยเขียน Google Apps Script ให้หน่อย: เมื่อมีการ Submit Google Form ใหม่ ให้ส่งการแจ้งเตือน (Notification) ไปยัง Google Chat Room ที่กำหนด"</li>
+                        <li>"ฉันต้องการ Apps Script ที่จะอ่านข้อมูลจาก Google Sheet (ชีต A, คอลัมน์ B) และนำไปอัปเดตใน Google Doc (ไฟล์ Doc C) โดยอัตโนมัติ"</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+    </div>
+
+</body>
+</html>
