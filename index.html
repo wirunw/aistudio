@@ -646,20 +646,33 @@
         };
 
         // --- MOBILE MENU FUNCTION ---
+        function applySidebarState() {
+            const sidebar = document.getElementById('sidebar');
+            const modeSwitcher = document.getElementById('modeSwitcher');
+            const isDesktop = window.innerWidth >= 768;
+
+            if (isDesktop) {
+                mobileMenuOpen = false;
+                modeSwitcher.classList.add('hidden');
+                sidebar.classList.remove('hidden', 'fixed', 'inset-0', 'z-40', 'bg-white', 'w-64', 'h-full', 'overflow-y-auto', 'shadow-xl');
+                sidebar.classList.add('md:flex');
+            } else {
+                sidebar.classList.remove('md:flex');
+                if (mobileMenuOpen) {
+                    modeSwitcher.classList.remove('hidden');
+                    sidebar.classList.remove('hidden');
+                    sidebar.classList.add('fixed', 'inset-0', 'z-40', 'bg-white', 'w-64', 'h-full', 'overflow-y-auto', 'shadow-xl');
+                } else {
+                    modeSwitcher.classList.add('hidden');
+                    sidebar.classList.add('hidden');
+                    sidebar.classList.remove('fixed', 'inset-0', 'z-40', 'bg-white', 'w-64', 'h-full', 'overflow-y-auto', 'shadow-xl');
+                }
+            }
+        }
+
         function toggleMobileMenu() {
             mobileMenuOpen = !mobileMenuOpen;
-            const modeSwitcher = document.getElementById('modeSwitcher');
-            const sidebar = document.getElementById('sidebar');
-            
-            if (mobileMenuOpen) {
-                modeSwitcher.classList.remove('hidden');
-                sidebar.classList.remove('hidden');
-                sidebar.classList.add('fixed', 'inset-0', 'z-40', 'bg-white', 'w-64', 'h-full', 'overflow-y-auto', 'shadow-xl');
-            } else {
-                modeSwitcher.classList.add('hidden');
-                sidebar.classList.add('hidden');
-                sidebar.classList.remove('fixed', 'inset-0', 'z-40', 'bg-white', 'w-64', 'h-full', 'overflow-y-auto', 'shadow-xl');
-            }
+            applySidebarState();
         }
 
         // --- DATA CONFIGURATION ---
@@ -900,6 +913,10 @@
             const firstKey = Object.keys(templates).find(key => templates[key].cat !== 'comic');
             if (firstKey) selectTemplate(firstKey);
             
+            // Responsive sidebar
+            applySidebarState();
+            window.addEventListener('resize', applySidebarState);
+            
             // Initialize Comic Mode
             document.getElementById('charDesc').value = charPresets['bear_glasses']; 
             panels = generateConsultStory(4).map((p, i) => ({...p, id: Date.now() + i}));
@@ -933,19 +950,13 @@
                 if (mode === 'universal') {
                     document.getElementById('universalContent').classList.remove('hidden');
                     document.getElementById('comicContent').classList.add('hidden');
-                    sidebar.classList.remove('hidden', 'md:hidden');
-                    sidebar.classList.add('md:flex');
                 } else {
                     document.getElementById('universalContent').classList.add('hidden');
                     document.getElementById('comicContent').classList.remove('hidden');
-                    sidebar.classList.add('hidden', 'md:hidden');
-                    sidebar.classList.remove('md:flex');
                 }
             } else {
                 primaryApp.classList.add('hidden');
                 moduleWrapper.classList.remove('hidden');
-                sidebar.classList.add('hidden', 'md:hidden');
-                sidebar.classList.remove('md:flex');
                 const targetUrl = moduleUrls[mode];
                 if (targetUrl && moduleFrame.src !== targetUrl) {
                     moduleFrame.src = targetUrl;
@@ -956,6 +967,9 @@
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
+
+            // Keep sidebar responsive
+            applySidebarState();
         }
 
         // --- UNIVERSAL MODE FUNCTIONS ---
