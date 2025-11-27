@@ -675,6 +675,13 @@
             applySidebarState();
         }
 
+        function closeSidebarMobile() {
+            if (window.innerWidth < 768 && mobileMenuOpen) {
+                mobileMenuOpen = false;
+                applySidebarState();
+            }
+        }
+
         // --- DATA CONFIGURATION ---
         const categories = [
             { id: 'healthcare', name: 'การแพทย์ & เภสัชกรรม', icon: 'stethoscope' }, 
@@ -916,6 +923,7 @@
             // Responsive sidebar
             applySidebarState();
             window.addEventListener('resize', applySidebarState);
+            document.getElementById('primaryApp')?.addEventListener('click', closeSidebarMobile);
             
             // Initialize Comic Mode
             document.getElementById('charDesc').value = charPresets['bear_glasses']; 
@@ -1057,6 +1065,9 @@
             if (typeof lucide !== 'undefined') {
                 lucide.createIcons();
             }
+
+            // Hide sidebar after selecting on mobile
+            closeSidebarMobile();
         }
 
         function updateValue(id, val) {
