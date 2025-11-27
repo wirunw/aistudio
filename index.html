@@ -155,10 +155,6 @@
                     <button onclick="logout()" class="p-1.5 sm:p-2 rounded-lg bg-slate-100 hover:bg-red-100 text-slate-700 hover:text-red-600 transition-colors border border-slate-200">
                         <i data-lucide="log-out" class="w-4 h-4"></i>
                     </button>
-                    <!-- Mobile Menu Toggle -->
-                    <button onclick="toggleMobileMenu()" class="md:hidden p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors border border-slate-200">
-                        <i data-lucide="menu" class="w-4 h-4"></i>
-                    </button>
                 </div>
             </div>
             
@@ -934,6 +930,10 @@
             applySidebarState();
             window.addEventListener('resize', applySidebarState);
             document.getElementById('primaryApp')?.addEventListener('click', closeSidebarMobile);
+            // Allow tapping mode switcher to toggle menu on mobile
+            document.getElementById('modeSwitcher')?.addEventListener('click', () => {
+                if (window.innerWidth < 768) toggleMobileMenu();
+            });
             
             // Initialize Comic Mode
             document.getElementById('charDesc').value = charPresets['bear_glasses']; 
