@@ -78,6 +78,7 @@
         
         .panel-card {
             transition: all 0.3s ease;
+            width: 100%;
         }
         .panel-card:hover {
             transform: translateY(-2px);
@@ -137,79 +138,79 @@
 
     <!-- Header -->
     <header class="bg-white shadow-sm border-b border-slate-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
-            <div class="flex flex-col gap-3">
-                <!-- Logo and Title Row -->
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center gap-2 sm:gap-3">
-                        <div class="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-1.5 sm:p-2 rounded-lg shadow-md">
-                            <i data-lucide="sparkles" class="w-5 h-5 sm:w-6 sm:h-6"></i>
-                        </div>
-                        <div>
-                            <h1 class="text-lg sm:text-xl font-bold text-slate-800 tracking-tight">Pharm Connection <span class="text-purple-600">AI Studio</span></h1>
-                            <p class="text-xs text-slate-500 hidden sm:block">Unified Prompt Generator v5.0</p>
-                        </div>
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 py-1 sm:py-3">
+            <!-- Compact Logo and Title Row -->
+            <div class="flex items-center justify-between">
+                <div class="flex items-center gap-2 sm:gap-3">
+                    <div class="bg-gradient-to-r from-purple-500 to-pink-600 text-white p-1 sm:p-2 rounded-lg shadow-md">
+                        <i data-lucide="sparkles" class="w-4 h-4 sm:w-6 sm:h-6"></i>
                     </div>
-                    
-                    <!-- Mobile Menu Toggle -->
-                    <button onclick="toggleMobileMenu()" class="md:hidden p-2 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors">
-                        <i data-lucide="menu" class="w-5 h-5"></i>
-                    </button>
+                    <div>
+                        <h1 class="text-sm sm:text-xl font-bold text-slate-800 tracking-tight">Pharm Connection <span class="text-purple-600">AI Studio</span></h1>
+                        <p class="text-xs text-slate-500 hidden sm:block">Unified Prompt Generator v5.0</p>
+                    </div>
                 </div>
                 
-                <!-- Mode Switcher - Desktop: Always visible, Mobile: Toggle with menu -->
-                <div id="modeSwitcher" class="flex bg-slate-100 rounded-lg p-1 overflow-x-auto w-full md:w-auto hidden md:flex">
-                    <button onclick="switchMode('universal')" id="universalMode" class="mode-tab px-3 py-2 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
-                        <i data-lucide="layers" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
-                        <span class="hidden sm:inline">Universal Mode</span>
-                        <span class="sm:hidden">Universal</span>
-                    </button>
-                    <button onclick="switchMode('comic')" id="comicMode" class="mode-tab px-3 py-2 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
-                        <i data-lucide="book-open" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
-                        <span class="hidden sm:inline">Comic Studio</span>
-                        <span class="sm:hidden">Comic</span>
-                    </button>
-                    <button onclick="switchMode('hcp')" id="hcpMode" class="mode-tab px-3 py-2 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
-                        <i data-lucide="stethoscope" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
-                        <span class="hidden sm:inline">HCP Characters</span>
-                        <span class="sm:hidden">HCP</span>
-                    </button>
-                    <button onclick="switchMode('infographic')" id="infographicMode" class="mode-tab px-3 py-2 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
-                        <i data-lucide="bar-chart-3" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
-                        <span class="hidden sm:inline">Dashboard Guide</span>
-                        <span class="sm:hidden">Dashboard</span>
-                    </button>
-                    <button onclick="switchMode('task')" id="taskMode" class="mode-tab px-3 py-2 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
-                        <i data-lucide="clipboard-list" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
-                        <span class="hidden sm:inline">Office Tasks</span>
-                        <span class="sm:hidden">Tasks</span>
-                    </button>
-                    <button onclick="switchMode('myprompt')" id="mypromptMode" class="mode-tab px-3 py-2 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
-                        <i data-lucide="bookmark-plus" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
-                        <span class="hidden sm:inline">My Prompts</span>
-                        <span class="sm:hidden">My Prompts</span>
-                    </button>
-                </div>
+                <!-- Mobile Menu Toggle -->
+                <button onclick="toggleMobileMenu()" class="md:hidden p-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 transition-colors">
+                    <i data-lucide="menu" class="w-4 h-4"></i>
+                </button>
+            </div>
+            
+            <!-- Mode Switcher - Desktop: Always visible, Mobile: Toggle with menu -->
+            <div id="modeSwitcher" class="flex bg-slate-100 rounded-lg p-1 overflow-x-auto w-full md:w-auto hidden md:flex mt-2 md:mt-3">
+                <button onclick="switchMode('universal')" id="universalMode" class="mode-tab px-2 py-1.5 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
+                    <i data-lucide="layers" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
+                    <span class="hidden sm:inline">Universal Mode</span>
+                    <span class="sm:hidden">U</span>
+                </button>
+                <button onclick="switchMode('comic')" id="comicMode" class="mode-tab px-2 py-1.5 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
+                    <i data-lucide="book-open" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
+                    <span class="hidden sm:inline">Comic Studio</span>
+                    <span class="sm:hidden">C</span>
+                </button>
+                <button onclick="switchMode('hcp')" id="hcpMode" class="mode-tab px-2 py-1.5 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
+                    <i data-lucide="stethoscope" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
+                    <span class="hidden sm:inline">HCP Characters</span>
+                    <span class="sm:hidden">HCP</span>
+                </button>
+                <button onclick="switchMode('infographic')" id="infographicMode" class="mode-tab px-2 py-1.5 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
+                    <i data-lucide="bar-chart-3" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
+                    <span class="hidden sm:inline">Dashboard Guide</span>
+                    <span class="sm:hidden">D</span>
+                </button>
+                <button onclick="switchMode('task')" id="taskMode" class="mode-tab px-2 py-1.5 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
+                    <i data-lucide="clipboard-list" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
+                    <span class="hidden sm:inline">Office Tasks</span>
+                    <span class="sm:hidden">T</span>
+                </button>
+                <button onclick="switchMode('myprompt')" id="mypromptMode" class="mode-tab px-2 py-1.5 sm:px-4 rounded-md text-xs sm:text-sm font-semibold transition-all whitespace-nowrap flex items-center gap-1">
+                    <i data-lucide="bookmark-plus" class="w-3 h-3 sm:w-4 sm:h-4"></i> 
+                    <span class="hidden sm:inline">My Prompts</span>
+                    <span class="sm:hidden">M</span>
+                </button>
             </div>
 
-            <!-- Creator Credit Banner -->
-            <div class="mt-3">
+            <!-- Creator Credit Banner - Hidden on mobile to save space -->
+            <div class="mt-2 hidden md:block">
                 <div class="pro-glass rounded-xl px-4 py-3 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
                     <div class="flex items-center gap-3">
-                        <div class="w-14 h-14 rounded-xl overflow-hidden avatar-frame bg-white/10">
-                            <img src="https://i.postimg.cc/yY1rPJ07/wirun_facbook.png" alt="ภก.วิรุณ เวชศิริ (พี่หมี)" class="w-full h-full object-cover" loading="lazy">
+                        <div class="flex items-center gap-3">
+                            <div class="w-14 h-14 rounded-xl overflow-hidden avatar-frame bg-white/10">
+                                <img src="https://i.postimg.cc/yY1rPJ07/wirun_facbook.png" alt="ภก.วิรุณ เวชศิริ (พี่หมี)" class="w-full h-full object-cover" loading="lazy">
+                            </div>
+                            <div>
+                                <p class="text-[11px] uppercase tracking-[0.2em] text-indigo-200 font-semibold">Product Owner / Creator</p>
+                                <p class="text-lg font-bold leading-tight">ภก.วิรุณ เวชศิริ (พี่หมี)</p>
+                                <p class="text-xs text-indigo-100">Pharm Connection Co., Ltd.</p>
+                            </div>
                         </div>
-                        <div>
-                            <p class="text-[11px] uppercase tracking-[0.2em] text-indigo-200 font-semibold">Product Owner / Creator</p>
-                            <p class="text-lg font-bold leading-tight">ภก.วิรุณ เวชศิริ (พี่หมี)</p>
-                            <p class="text-xs text-indigo-100">Pharm Connection Co., Ltd.</p>
+                        <div class="flex items-center gap-2">
+                            <span class="pro-chip">Professional UI Refresh</span>
+                            <span class="pro-chip light flex items-center gap-1">
+                                <i data-lucide="shield-check" class="w-4 h-4"></i> Unified v5.0
+                            </span>
                         </div>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="pro-chip">Professional UI Refresh</span>
-                        <span class="pro-chip light flex items-center gap-1">
-                            <i data-lucide="shield-check" class="w-4 h-4"></i> Unified v5.0
-                        </span>
                     </div>
                 </div>
             </div>
@@ -222,32 +223,32 @@
         <!-- Sidebar (Categories) -->
         <aside id="sidebar" class="w-80 bg-gray-50 border-r border-gray-200 flex flex-col hidden md:flex">
             <!-- Search Bar -->
-            <div class="p-4 border-b border-gray-200">
+            <div class="p-3 border-b border-gray-200">
                 <div class="relative">
                     <input type="text" id="searchInput" placeholder="ค้นหา templates..." 
-                           class="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent">
-                    <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-gray-400"></i>
+                           class="w-full pl-9 pr-3 py-1.5 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <i data-lucide="search" class="w-4 h-4 absolute left-2.5 top-2 text-gray-400"></i>
                 </div>
             </div>
             
             <!-- Menu List -->
-            <div class="flex-1 overflow-y-auto p-4">
-                <h2 class="text-[11px] font-bold text-gray-400 uppercase tracking-wider mb-4 pl-2">Select Template</h2>
-                <nav id="categoryNav" class="space-y-6">
+            <div class="flex-1 overflow-y-auto p-3">
+                <h2 class="text-[10px] font-bold text-gray-400 uppercase tracking-wider mb-3 pl-2">Select Template</h2>
+                <nav id="categoryNav" class="space-y-4">
                     <!-- Categories injected by JS -->
                 </nav>
             </div>
             
             <!-- Credit Footer -->
-            <div class="p-4 border-t border-gray-200 bg-white">
-                <div class="flex items-center gap-3">
-                    <div class="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
-                        <i data-lucide="user"></i>
+            <div class="p-3 border-t border-gray-200 bg-white">
+                <div class="flex items-center gap-2">
+                    <div class="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-gray-400">
+                        <i data-lucide="user" class="w-3 h-3"></i>
                     </div>
                     <div>
-                        <p class="text-[10px] text-gray-400 uppercase font-bold">Developed by</p>
-                        <p class="text-xs font-bold text-[#3D405B]">ภก.วิรุณ เวชศิริ (พี่หมี)</p>
-                        <p class="text-[10px] text-gray-500">Pharm Connection Co., Ltd.</p>
+                        <p class="text-[9px] text-gray-400 uppercase font-bold">Developed by</p>
+                        <p class="text-xs font-bold text-[#3D405B]">ภก.วิรุณ เวชศิริ</p>
+                        <p class="text-[9px] text-gray-500">Pharm Connection</p>
                     </div>
                 </div>
             </div>
@@ -400,10 +401,10 @@
 
             <!-- Comic Mode Content -->
             <div id="comicContent" class="hidden flex-1 overflow-y-auto p-4 md:p-10">
-                <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <div class="max-w-7xl mx-auto grid grid-cols-1 gap-8">
                     
                     <!-- Left Column: Settings & Panels (Input) -->
-                    <div class="lg:col-span-7 space-y-6">
+                    <div class="space-y-6 min-w-0">
                         
                         <!-- 1. Global Settings -->
                         <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6">
@@ -463,9 +464,10 @@
                                     <button onclick="setChar('doc_f')" class="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 whitespace-nowrap">หมอหญิง (ผมยาว)</button>
                                     <button onclick="setChar('pharma_m')" class="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 whitespace-nowrap">เภสัชชาย (เสื้อกาวน์)</button>
                                     <button onclick="setChar('bear_no_glasses')" class="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 whitespace-nowrap">เภสัชหมี (ไม่แว่น)</button>
-                                    <button onclick="setChar('bear_glasses')" class="text-xs bg-white border border-slate-200 px-2 py-1 rounded hover:bg-slate-50 whitespace-nowrap">เภสัชหมี (ใส่แว่น)</button>
+                                    <button onclick="setChar('bear_glasses')" class="text-xs bg-white border-slate-200 px-2 py-1 rounded hover:bg-slate-50 whitespace-nowrap">เภสัชหมี (ใส่แว่น)</button>
                                 </div>
                             </div>
+                        </div>
                         </div>
 
                         <!-- 2. Storyboard Editor -->
@@ -481,7 +483,7 @@
                                      <!-- Add Panel Button -->
                                      <button onclick="addPanel()" class="bg-slate-800 hover:bg-slate-900 text-white text-sm px-3 py-1.5 rounded-lg flex items-center gap-1 transition shadow-sm">
                                         <i data-lucide="plus-circle" class="w-4 h-4"></i> เพิ่มช่อง
-                                    </button>
+                                     </button>
                                 </div>
 
                                 <!-- Story Presets Control Panel -->
@@ -529,7 +531,7 @@
                     </div>
 
                     <!-- Right Column: Output & Preview -->
-                    <div class="lg:col-span-5 space-y-6">
+                    <div class="space-y-6">
                         
                         <!-- Sticky Container -->
                         <div class="sticky top-24 space-y-6">
@@ -564,6 +566,7 @@
                                     </button>
                                 </div>
                             </div>
+                        </div>
 
                             <!-- Preview Structure (Visual Guide) -->
                             <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-5">
@@ -580,13 +583,13 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
                         </div>
                     </div>
 
                 </div>
             </div>
-
         </div>
     </div>
 
@@ -661,7 +664,7 @@
 
         // --- DATA CONFIGURATION ---
         const categories = [
-            { id: 'healthcare', name: 'การแพทย์ & เภสัชกรรม', icon: 'user-doctor' }, 
+            { id: 'healthcare', name: 'การแพทย์ & เภสัชกรรม', icon: 'stethoscope' }, 
             { id: 'marketing', name: 'การตลาด & ธุรกิจ', icon: 'trending-up' },
             { id: 'edit', name: 'รีทัช & แก้ไขภาพ', icon: 'wand-2' },
             { id: 'travel', name: 'ท่องเที่ยว & ไลฟ์สไตล์', icon: 'plane' },
@@ -674,7 +677,7 @@
         const templates = {
             // --- HEALTHCARE ---
             'health_pharmacy': {
-                cat: 'healthcare', title: 'เภสัชกรชุมชน (Modern Pharmacy)', icon: 'prescription',
+                cat: 'healthcare', title: 'เภสัชกรชุมชน (Modern Pharmacy)', icon: 'pill',
                 desc: 'แนบรูปหน้าตรง > ได้ภาพเภสัชกรในร้านยาสมัยใหม่',
                 inputs: [
                     { id: 'gender', type: 'select', label: 'เภสัชกร', options: [{v:'Male pharmacist', t:'เภสัชกรชาย'}, {v:'Female pharmacist', t:'เภสัชกรหญิง'}] },
@@ -726,7 +729,7 @@
                     { id: 'title', type: 'text', label: 'พาดหัวคลิป', default: 'เลือก คู่หู AI ยังไงดี?' },
                     { id: 'gender', type: 'select', label: 'ตัวละคร', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] }
                 ],
-                basePrompt: (d, adv) => `YouTube thumbnail, engaging and high contrast. Thai text "${d.title}". A ${d.gender} showing expressive emotion related to the topic. Colorful background. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+                basePrompt: (d, adv) => `YouTube thumbnail, engaging and high contrast. Thai text "${d.title}". A ${d.gender} showing expressive emotion related to topic. Colorful background. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
             },
             'mkt_interior': {
                 cat: 'marketing', title: 'ออกแบบภายใน (Interior)', icon: 'home',
@@ -758,13 +761,13 @@
             },
             'edit_shirt': {
                 cat: 'edit', title: 'เปลี่ยนสีเสื้อ (Change Shirt)', icon: 'shirt',
-                desc: 'แนบภาพ > เปลี่ยนลาย/สีเสื้อ โดยไม่เปลี่ยนทรง',
+                desc: 'แนบรูปหน้า > เปลี่ยนลาย/สีเสื้อ โดยไม่เปลี่ยนทรง',
                 inputs: [{ id: 'new_shirt', type: 'text', label: 'สี/แบบเสื้อใหม่', default: 'green t-shirt' }],
                 basePrompt: (d, adv) => `Change the person's shirt to a ${d.new_shirt}. Keep the wrinkles and lighting natural. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
             },
             'edit_bg': {
                 cat: 'edit', title: 'เปลี่ยนฉากหลัง (Change BG)', icon: 'image',
-                desc: 'แนบภาพ > เปลี่ยนพื้นหลังเป็นสถานที่ใหม่',
+                desc: 'แนบรูปหน้า > เปลี่ยนพื้นหลังเป็นสถานที่ใหม่',
                 inputs: [{ id: 'new_bg', type: 'text', label: 'ฉากหลังใหม่', default: 'modern office with city view' }],
                 basePrompt: (d, adv) => `Remove background and replace with ${d.new_bg}. Ensure realistic lighting and perspective matching the subject. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
             },
@@ -797,12 +800,12 @@
                     { id: 'location', type: 'text', label: 'สถานที่ (Location)', default: 'narrow mountain ridge overlooking a stunning twin bay coastal landscape' },
                     { id: 'shirtText', type: 'text', label: 'ข้อความบนเสื้อ', default: 'AREZIN' }
                 ],
-                basePrompt: (d, adv) => `Use reference face. Breathtaking high-angle selfie at ${d.location}. Subject: ${d.gender}, wearing plaid shirt open over black tee with text "${d.shirtText}". ${adv.lighting} ${adv.camera} ${adv.style} ${adv.mood} ${adv.aspect}`
+                basePrompt: (d, adv) => `Use reference face. Breathtaking high-angle selfie at ${d.location}. Subject: ${d.gender}, wearing plaid shirt open over black tee with text "${d.shirtText}". ${adv.camera} ${adv.style} ${adv.mood} ${adv.aspect}`
             },
             'travel_park': {
                 cat: 'travel', title: 'พักผ่อนในสวน (Park)', icon: 'trees',
                 desc: 'แนบรูปคู่สัตว์เลี้ยง > ย้ายไปนั่งชิลในสวนสาธารณะ',
-                inputs: [{ id: 'action', type: 'text', label: 'ท่าทาง', default: 'sitting on a bench' }],
+                inputs: [{ id: 'action', type: 'text', label: 'ท่าทาง', default: 'sitting on a bench' } ],
                 basePrompt: (d, adv) => `Put this person and the cat in the same pose outside in a beautiful park, ${d.action}. Lush green trees, peaceful atmosphere. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
             },
             'travel_history': {
@@ -825,7 +828,9 @@
             'fashion_pigeons': {
                 cat: 'fashion', title: 'นกพิราบปารีส (Parisian Pigeons)', icon: 'bird',
                 desc: 'แนบรูปหน้า > ยืนเท่ท่ามกลางฝูงนกบินว่อน ฉากหลังปารีส',
-                inputs: [{ id: 'gender', type: 'select', label: 'เพศ', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] }],
+                inputs: [
+                    { id: 'gender', type: 'select', label: 'เพศ', options: [{v:'man', t:'ผู้ชาย'}, {v:'woman', t:'ผู้หญิง'}] }
+                ],
                 basePrompt: (d, adv) => `Cinematic portrait of a ${d.gender} in a long black trench coat surrounded by blurry pigeons flying dramatically. Paris historical building background. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
             },
             'fashion_newspaper': {
@@ -842,7 +847,7 @@
             'art_figure': {
                 cat: '3d_art', title: '3D Figure Box Set', icon: 'box',
                 desc: 'แนบรูปหน้า > แปลงคนเป็นฟิกเกอร์ของเล่นในกล่อง',
-                inputs: [{ id: 'bg_item', type: 'text', label: 'ของประกอบฉาก', default: 'computer with Blender' }],
+                inputs: [{ id: 'bg_item', type: 'text', label: 'ของประกอบฉาก', default: 'computer with Blender' } ],
                 basePrompt: (d, adv) => `Turn photo into Full 3D character figure. Behind it place a box with character's image, and ${d.bg_item}. PVC material. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
             },
             'art_toon': {
@@ -859,7 +864,7 @@
                     { id: 'theme', type: 'text', label: 'ธีม/พลัง (Theme)', default: 'Superhero style with slight superpowers' },
                     { id: 'layout', type: 'select', label: 'การจัดวาง (Layout)', options: [{v:'Asymmetrical layout, dynamic panels', t:'แบบไดนามิก (Dynamic)'}, {v:'Classic grid layout', t:'ตารางมาตรฐาน (Grid)'}, {v:'Manga style layout', t:'สไตล์มังงะ (Manga)'}] }
                 ],
-                basePrompt: (d, adv) => `Make a comic strip of the person attached in reference image ${d.activity}. High energy, cheerful smile. Theme: ${d.theme}. Layout: ${d.layout}. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
+                basePrompt: (d, adv) => `Make a comic strip of person attached in reference image ${d.activity}. High energy, cheerful smile. Theme: ${d.theme}. Layout: ${d.layout}. ${adv.lighting} ${adv.style} ${adv.mood} ${adv.aspect}`
             },
 
             // --- COMIC STUDIO TEMPLATES ---
@@ -1018,7 +1023,7 @@
                             ${inp.options.map(o => `<option value="${o.v}" ${o.v === formValues[inp.id]?'selected':''}>${o.t}</option>`).join('')}
                         </select><div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-500"><i data-lucide="chevron-down" class="w-4 h-4"></i></div></div>`;
                     } else {
-                        html += `<input type="text" value="${formValues[inp.id]}" oninput="updateValue('${inp.id}', this.value)" class="w-full bg-white border-gray-200 text-gray-700 rounded-lg text-sm focus:ring-purple-500 focus:border-purple-500 shadow-sm p-2.5 placeholder-gray-300" placeholder="...">`;
+                        html += `<input type="text" value="${formValues[inp.id]}" oninput="updateValue('${inp.id}', this.value)" class="w-full bg-white border-gray-200 text-gray-700 rounded-lg text-sm focus:ring-purple-500 focus:border-purple-500 shadow-sm p-2.5 placeholder-gray-300">`;
                     }
                     html += `</div>`;
                     inputContainer.innerHTML += html;
@@ -1066,42 +1071,36 @@
             
             const btn = document.getElementById('copyBtn');
             const originalText = btn.innerHTML;
+            const showSuccess = () => {
+                btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> คัดลอกแล้ว`;
+                btn.classList.add('bg-green-500', 'text-white', 'border-transparent');
+                btn.classList.remove('bg-white/10');
+                setTimeout(() => {
+                    btn.innerHTML = originalText;
+                    btn.classList.remove('bg-green-500', 'text-white', 'border-transparent');
+                    btn.classList.add('bg-white/10');
+                    if (typeof lucide !== 'undefined') lucide.createIcons();
+                }, 2000);
+            };
 
             // Fallback copy method
             const copyToClipboard = async () => {
                 try {
                     // Try normal clipboard API first (might fail in Google Sites iframe)
                     await navigator.clipboard.writeText(txt.value);
-                    
-                    // Success feedback
-                    btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> คัดลอกแล้ว`;
-                    btn.classList.add('bg-green-500', 'text-white', 'border-transparent');
-                    btn.classList.remove('bg-white/10');
-                    setTimeout(() => {
-                        btn.innerHTML = `<i data-lucide="copy" class="w-4 h-4"></i> คัดลอกโค้ด`;
-                        btn.classList.remove('bg-green-500', 'text-white', 'border-transparent');
-                        btn.classList.add('bg-white/10');
-                        if (typeof lucide !== 'undefined') lucide.createIcons();
-                    }, 2000);
+                    showSuccess();
                 } catch (err) {
                     // Failover to execCommand (better support in iframes)
                     try {
                         document.execCommand('copy');
-                        btn.innerHTML = `<i data-lucide="check" class="w-4 h-4"></i> คัดลอกแล้ว`;
-                        btn.classList.add('bg-green-500', 'text-white', 'border-transparent');
-                        btn.classList.remove('bg-white/10');
-                        setTimeout(() => {
-                            btn.innerHTML = `<i data-lucide="copy" class="w-4 h-4"></i> คัดลอกโค้ด`;
-                            btn.classList.remove('bg-green-500', 'text-white', 'border-transparent');
-                            btn.classList.add('bg-white/10');
-                            if (typeof lucide !== 'undefined') lucide.createIcons();
-                        }, 2000);
+                        showSuccess();
                     } catch (e) {
                         console.error('Failed to copy:', e);
-                        alert('ไม่สามารถคัดลอกได้อัตโนมัติ กรุณากด Ctrl+C / Cmd+C');
+                        alert('ไม่สามารถคัดลอกได้อัตโนมัติกรุณากด Ctrl+C / Cmd+C');
+                        return;
                     }
                 }
-            }
+            };
             
             copyToClipboard();
         }
@@ -1136,7 +1135,6 @@
                 }
                 updatePreviewLayout();
                 showToast("สร้างเรื่องเรียบร้อย! (" + length + " ช่อง)");
-
             } catch (error) {
                 console.error("Error generating story:", error);
                 alert("เกิดข้อผิดพลาดในการสร้างเรื่อง โปรดรีเฟรชแล้วลองใหม่ครับ");
@@ -1146,8 +1144,7 @@
         // 1. Consultation Theme Generator
         function generateConsultStory(n) {
             let p = [];
-            p.push({type:'S', action:'Doctor sitting at desk, smiling warmly at the patient.', text:'สวัสดีครับ วันนี้เป็นอะไรมาครับ?'});
-            
+            p.push({type:'S', action:'Doctor sitting at desk, smiling warmly at the patient.', text:'สวัสดีครับ วันนี้เป็นอะไรมาครับ?'});            
             if(n >= 4) p.push({type:'C', action:'Patient holding their stomach/head, expression of pain.', text:'ปวดตรงนี้มากเลยครับ เป็นมา 2 วันแล้ว'});
             if(n >= 6) p.push({type:'C', action:'Patient explaining more details, looking worried.', text:'กินยาก็ไม่หาย กังวลมากเลยครับ'});
             if(n >= 8) p.push({type:'Q', action:'Doctor checking pulse or temperature.', text:'ขอหมอตรวจเบื้องต้นหน่อยนะครับ...'});
@@ -1169,11 +1166,11 @@
             let p = [];
             p.push({type:'S', action:'Zoom in on body part. Cartoon germs/virus looking mean.', text:'นี่คือตัวการที่ทำให้คุณป่วย!'});
             if(n >= 4) p.push({type:'C', action:'Character looking sick, sweating, suffering.', text:'โอ๊ยย ไม่ไหวแล้ว ทรมานจังเลย'});
-            if(n >= 6) p.push({type:'C', action:'Internal view: Germs attacking healthy cells.', text:'(เชื้อโรคกำลังโจมตีร่างกาย)'});
+            if(n >= 6) p.push({type:'C', action:'Internal view: Germs attacking healthy cells.', text:'(เชื้อโรคกำลังโจมตีร่างกาย)'}); 
             p.push({type:'Q', action:'Doctor introducing the product like a hero item.', text:'ไม่ต้องห่วง! ตัวช่วยนี้จะเข้าไปจัดการปัญหาเอง'});
-            if(n >= 5) p.push({type:'A', action:'Microscopic view: The medicine fighting the germs.', text:'(ยาเข้าต่อสู้กับเชื้อโรค)'});
-            if(n >= 7) p.push({type:'A', action:'Microscopic view: Germs being defeated/running away.', text:'(เชื้อโรคแพ้พ่าย)'});
-            if(n >= 8) p.push({type:'A', action:'Internal view: Cells becoming healthy and pink again.', text:'(เซลล์ร่างกายฟื้นฟู)'});
+            if(n >= 5) p.push({type:'A', action:'Microscopic view: The medicine fighting the germs.', text:'(ยาเข้าต่อสู้กับเชื้อโรค)'}); 
+            if(n >= 7) p.push({type:'A', action:'Microscopic view: Germs being defeated/running away.', text:'(เชื้อโรคแพ้พ่าย)'}); 
+            if(n >= 8) p.push({type:'A', action:'Internal view: Cells becoming healthy and pink again.', text:'(เซลล์ร่างกายฟู)'}); 
             p.push({type:'A', action:'Character looking fresh, strong, thumbs up.', text:'หายดีแล้ว! กลับมาใช้ชีวิตได้ปกติเลยครับ'});
             return fitToSize(p, n);
         }
@@ -1183,9 +1180,9 @@
             let p = [];
             p.push({type:'S', action:'Person doing something wrong (e.g. taking meds with milk).', text:'กินยาพร้อมนมแบบนี้แหละ ง่ายดี'});
             p.push({type:'C', action:'Pharmacist runs in with a STOP sign gesture.', text:'เดี๋ยวครับ! ทำแบบนั้นไม่ได้นะ!'});
-            if(n >= 5) p.push({type:'C', action:'Person looks confused/shocked.', text:'อ้าว ทำไมล่ะครับ? ใครๆ เขาก็ทำกัน'});
+            if(n >= 5) p.push({type:'C', action:'Person looks confused/shocked.', text:'อ้าว ทำไม่ล่ะครับ? ใครๆ เขาก็ทำกัน'});
             p.push({type:'Q', action:'Pharmacist explaining with a diagram (X mark).', text:'นมจะไปจับตัวยา ทำให้ยาดูดซึมไม่ได้ครับ'});
-            if(n >= 6) p.push({type:'Q', action:'Diagram showing the correct way (Water vs Milk).', text:'ดูนี่นะครับ แคลเซียมในนมจะขัดขวางยา'});
+            if(n >= 6) p.push({type:'Q', action:'Pharmacist explaining with a diagram (X mark).', text:'นมจะไปจับตัวยา ทำให้ยาดูดซึมไม่ได้ครับ'});
             if(n >= 7) p.push({type:'A', action:'Pharmacist holding a glass of water, smiling.', text:'ควรทานกับน้ำเปล่าสะอาด ดีที่สุดครับ'});
             if(n >= 8) p.push({type:'A', action:'Pharmacist giving a summary tip.', text:'จำไว้นะครับ ยาฆ่าเชื้อห้ามกินพร้อมนม'});
             p.push({type:'A', action:'Person drinking water instead, nodding approval.', text:'อ๋อ เข้าใจแล้วครับ ต่อไปจะทำตามนี้เลย!'});
@@ -1195,13 +1192,13 @@
         // 4. Lifestyle Theme Generator
         function generateLifestyleStory(n) {
             let p = [];
-            p.push({type:'S', action:'Character doing bad habit (eating late/working hard).', text:'(พฤติกรรมเสี่ยง)'});
+            p.push({type:'S', action:'Character doing bad habit (eating late/working hard).', text:'(พฤติกรรมเสี่ยง)'}); 
             p.push({type:'C', action:'Character feeling symptoms (pain/dizzy).', text:'รู้สึกไม่ดีเลย... เป็นอะไรเนี่ย'});
-            if(n >= 5) p.push({type:'C', action:'Character trying wrong solution (sleeping it off but failing).', text:'นอนพักก็ไม่หาย ทำไงดี'});
+            if(n >= 5) p.push({type:'C', action:'Character trying wrong solution (sleeping it off but failing).', text:'นอนพักก็ไม่หาย ทำไงดี้'});
             p.push({type:'Q', action:'Doctor pointing to a chart/clock/food.', text:'นอกจากทานยา ต้องปรับพฤติกรรมด้วยนะครับ'});
             if(n >= 6) p.push({type:'A', action:'Visual of "Do This" (Eating veggies/Exercise).', text:'1. เลือกทานอาหารที่มีประโยชน์'});
             if(n >= 7) p.push({type:'A', action:'Visual of "Don\'t Do This" (No alcohol/No late night).', text:'2. งดมื้อดึกและแอลกอฮอล์'});
-            if(n >= 8) p.push({type:'A', action:'Visual of "Sleep" (Clock showing 10PM).', text:'3. เข้านอนให้เป็นเวลา'});
+            if(n >= 8) p.push({type:'A', action:'Visual of "Sleep" (Clock showing 10PM).', text:'3. เข้านอนให้เป็นวลา'});
             p.push({type:'A', action:'Character looking healthy and energetic.', text:'ปรับตัวแล้ว ชีวิตดีขึ้นเยอะเลย!'});
             return fitToSize(p, n);
         }
@@ -1242,7 +1239,7 @@
                             </select>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        <div class="grid grid-cols-1 gap-3">
                             <div>
                                 <label class="text-xs font-semibold text-slate-500 uppercase">Visual / Action</label>
                                 <textarea oninput="updatePanel(${index}, 'action', this.value)" rows="2" class="w-full text-sm p-2 border border-slate-300 rounded focus:border-purple-500 focus:outline-none" placeholder="ทำอะไร...">${panel.action}</textarea>
@@ -1391,7 +1388,7 @@
                 if (p.type === 'C') moodNote = " (Mood: Tense/Worried/Problematic)";
                 if (p.type === 'Q') moodNote = " (Mood: Realization/Hope/Turning Point)";
                 if (p.type === 'A') moodNote = " (Mood: Happy/Relieved/Solution/Bright)";
-
+                
                 prompt += `Panel ${panelNum}: ${p.action}.${moodNote} `;
                 
                 // --- TOGGLE LOGIC ---
@@ -1434,19 +1431,21 @@
             if (!currentUser) return;
             
             // Add user info to header
-            const headerDiv = document.querySelector('.pro-glass .flex-col.md\\:flex-row.md\\:items-center.md\\:justify-between.gap-4');
+            const headerDiv = document.querySelector('.pro-glass .flex-col.md\\:flex-row.md\\:flex-row.md\\:items-center.md\\:justify-between.gap-4');
             if (headerDiv) {
                 const userInfoHtml = `
                     <div class="flex items-center gap-3">
                         <div class="flex items-center gap-3">
-                            <div class="w-14 h-14 rounded-xl overflow-hidden avatar-frame bg-white/10">
-                                <img src="https://i.postimg.cc/yY1rPJ07/wirun_facbook.png" alt="ภก.วิรุณ เวชศิริ (พี่หมี)" class="w-full h-full object-cover" loading="lazy">
-                            </div>
+                            <div class="flex items-center gap-3">
+                                <div class="w-14 h-14 rounded-xl overflow-hidden avatar-frame bg-white/10">
+                                    <img src="https://i.postimg.cc/yY1rPJ07/wirun_facbook.png" alt="ภก.วิรุณ เวชศิริ (พี่หมี)" class="w-full h-full object-cover" loading="lazy">
+                                </div>
                             <div>
                                 <p class="text-[11px] uppercase tracking-[0.2em] text-indigo-200 font-semibold">Product Owner / Creator</p>
-                                <p class="text-lg font-bold leading-tight">ภก.วิรุณ เวชศิริ (พี่หมี)</p>
+                                <p class="text-lg font-bold leading-tight">ภก.วิรุณ เวชศิริ</p>
                                 <p class="text-xs text-indigo-100">Pharm Connection Co., Ltd.</p>
                             </div>
+                        </div>
                         </div>
                         <div class="flex items-center gap-2">
                             <span class="pro-chip">Professional UI Refresh</span>
@@ -1455,7 +1454,8 @@
                             </span>
                         </div>
                     </div>
-                    <div class="flex items-center gap-2">
+                </div>
+                <div class="flex items-center gap-2">
                         <div class="flex items-center gap-2">
                             <div class="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center">
                                 <i data-lucide="user-check" class="w-4 h-4 text-purple-600"></i>
@@ -1466,12 +1466,13 @@
                                 <p class="text-xs text-indigo-100">${currentUser.role === 'admin' ? 'ผู้ดูแล' : 'ผู้ใช้ทั่วไป'}</p>
                             </div>
                         </div>
+                        </div>
                         <button onclick="logout()" class="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 border border-white/20 hover:border-white/40">
                             <i data-lucide="log-out" class="w-4 h-4"></i>
                             ออกจากระบบ
                         </button>
                         ${currentUser.role === 'admin' ? `
-                        <button onclick="window.location.href='admin.html'" class="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 border border-white/20 hover:border-white/40">
+                        <button onclick="window.location.href='admin.html'" class="bg-white/20 hover:bg-white/30 text-white text-xs px-3 py-1.5 rounded-lg transition-all flex items-center gap-1 border-white/20 hover:border-white/40">
                             <i data-lucide="settings" class="w-4 h-4"></i>
                             จัดการผู้ใช้
                         </button>` : ''}
